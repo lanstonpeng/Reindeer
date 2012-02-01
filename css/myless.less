@@ -1,0 +1,312 @@
+
+/*
+@@Rest
+---------------------------------------------------------
+*/
+
+
+/*
+@@Helper
+---------------------------------------------------------
+
+
+*/
+
+.Transistion(@prop:all,@time:0.4s,@func:ease){
+	
+	-webkit-transition:@arguments;
+	-moz-transition:@arguments;
+	-o-transition:@arguments;
+}
+
+
+/*
+
+*/
+@clientHeight:`$(window).height()`;
+
+@color:gray;
+
+body{
+
+	background-color:@color;
+}
+
+/*
+@@Navigation Part
+*/
+.navigation{
+	div{
+		width: 50px; 
+		height: 50px;	
+	}
+
+	.logo{
+		position: fixed;
+		top:0;
+		background:lightblue;
+	}
+	.buttons{
+		
+		font-size:12px;
+		color:white;
+		position: fixed;
+		top:20%;
+		div{
+			.Transistion(width,0.2s,ease-in);
+			position: relative;
+			background:orange;
+			 
+			span{
+				position: relative;
+				 
+			}
+		}
+		div:hover{
+			width:70px;
+		}
+
+		.stream{background-color: #3C81B5;}
+		.monday{background-color: #213540;}
+		.tuesday{background-color: #F36324;}
+		.wednesday{background-color: #3CB5A2;}
+		.thursday{background-color: #0C486C;}
+		.friday{background-color: #EB9605;}
+		.saturday{background-color: #FE4E50;}
+	}
+	.nav-arrow{
+		position: fixed;
+		bottom:0;
+		background:green;
+	}
+}
+
+/*
+@@Main Content
+
+*/
+#main{
+	h1{
+		color:white;
+	}
+	overflow: hidden;
+	>div{
+		
+		height:0px+@clientHeight;
+	}
+
+	.streamContent{
+		background-color: #3C81B5;
+		 
+	}
+	.mondayContent{
+		background-color: #213540;
+		color:white; //##warning:need to be more considerate
+		 
+	}
+	.tuesdayContent{
+		background-color: #F36324;
+		 
+	}
+	.wednesdayContent{
+		background-color: #3CB5A2;
+		 
+	}
+	.thursdayContent{
+		background-color: #0C486C;
+		 
+	}
+	.fridayContent{
+		background-color: #EB9605;
+		 
+	}
+	.saturdayContent{
+		background-color: #FE4E50;
+		 
+	}
+	/*
+		@@courseTable
+	*/
+	.courseTable{
+		
+		margin-left:20px;
+		position: relative;
+		z-index:2;
+		overflow:hidden;
+
+		tbody tr:hover{
+	
+			background-color:lightblue;
+		}
+	}
+	/*
+	  @@the overlap
+
+	*/
+	.courseOverlay{
+		position: fixed;
+		//background-color:grey;
+		display:none;
+		z-index:90;
+		height:100%;
+		width:100%;
+		opacity:1;
+		top:0;
+		 
+
+		.leftContent{
+
+			height:100%;
+			width:97%;
+			background-color:#F3F2EE;
+			float:right;
+		}
+
+		.tooltips{
+			height:100%;
+			width:3%;
+			background-color:#213E4A;
+			float:left;
+			position:relative;
+
+			.backTo{
+				background-color:grey;
+				cursor:pointer;
+				
+			}
+		}
+	}
+
+	.reviewOverlay{
+		 
+		position: fixed;
+		display: none;
+		top:0;
+		z-index:70;
+		height:100%;
+		width:100%;
+		opacity:1;
+		
+
+		.ReviewArea{
+			 
+			position: absolute;
+			background-color:#F3F2EE;
+			display:none;
+			z-index:80;
+			height:80%;
+			width:100%;
+			opacity:1;
+			top:0;
+
+		}
+		.addReviewArea{
+			position: absolute;
+			background-color:grey;
+			display:none;
+			z-index:80;
+			height:20%;
+			width:100%;
+			opacity:1;
+			bottom:0;
+
+		}
+	}
+	
+	.wholeCourseOverlay{
+		position: fixed;
+		//background-color:grey;
+		display:none;
+		z-index:90;
+		height:100%;
+		width:100%;
+		opacity:1;
+		top:0;
+		 
+
+		.rightContent{
+
+			height:100%;
+			width:97%;
+			background-color:#F3F2EE;
+			float:left;
+		}
+
+		.tooltips{
+			height:100%;
+			width:3%;
+			background-color:#213E4A;
+			float:right;
+			position:relative;
+
+			.backTo{
+				background-color:grey;
+				cursor:pointer;
+				
+			}
+		}
+
+	}
+		/*
+	@@about the course details
+	*/
+	.row {
+		> [class*="span"]{
+			.Transistion(margin-left,0.4s,ease-in-out);
+		}
+
+		.addReviewBtn{
+			margin-left:20px;
+		}
+	}
+
+
+
+	.detailsHidden1{
+		.Transistion(margin-left,0.4s,ease-in);
+		margin-left:960px !important;
+	}
+	.detailsHidden2{
+		.Transistion(margin-left,0.4s,ease-out);
+		margin-left:-960px !important;
+	}
+
+
+	.details{
+		position: relative;
+		z-index:1;
+		
+		.itemTitle{
+			 
+		}
+
+		.reviews{
+			.span3{
+				background-color:#213E4A;
+			}
+
+		}
+
+		.progressDetails{
+			margin-top:-20px;
+		}
+
+	}
+
+	//addCouse Btn
+	.addCourse{
+		
+		position: absolute;
+		bottom:0;
+		right:0;
+	}
+	
+
+	
+}
+
+
+
+
+
+
