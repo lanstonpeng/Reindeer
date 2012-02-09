@@ -6,58 +6,88 @@
     
     <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
 	<link type="text/css" rel="stylesheet/less" href="css/myless.less">
-    <script type="text/javascript" src="js/jquery.1.7.1-min.js"></script>
-    <script pe="text/javascript" src="js/bootstrap.min.js"></script>
+     <script type="text/javascript" src="js/jquery.1.7.1-min.js"></script>
+     <script pe="text/javascript" src="js/bootstrap.min.js"></script>
    
-    <script src="js/jquery.easing.1.3.js"></script>
+     <script src="js/jquery.easing.1.3.js"></script>
      <script src="js/jquery.scrollto.min.js"></script>
      <script src="js/jquery-ui-1.8.17.custom.min.js"></script>
      <script src="js/bootstrap-tooltip.js"></script>
+     <script src="js/mustache.js"></script>
+     <script>
+          var sloader=(function(){
+              var doch=document.head;
+              var process=function(target,callback){
+                var tag=document.createElement("script");
+                tag.type="text/javascript";
+                tag.src=target;
+                tag.onload=function(){
+                  callback&&callback();
+                }
+                doch.appendChild(tag);
+
+              }
+
+              
+
+              return {
+                load:function(arr,callback){
+                  for(var i=0,len=arr.length;i<len;i++){
+                    process(arr[i],callback)
+                  }
+                                 
+                }
+              }
+          })();
+
+          sloader.load(["js/pangting.js"],function(){
+            
+             
+            
+            
+            pangting.init();
+          });
+
+     </script>
   </head>
 
   <body>
   <!--navigation bar-->
-  <div class="navigation">
+  <nav class="navigation">
             
             <div class="logo">
-                
+                Logo
             </div>
-            <div class="buttons">
-                <div class="stream">
-                    <span>Stream</span>
-                </div>
-                <div class="monday">
-                     <span>1</span>
-                </div>
-                <div class="tuesday">
-                     <span>2</span>
-                </div>
-                <div class="wednesday">
-                     <span>3</span>
-                </div>
-                <div class="thursday">
-                     <span>4</span>
-                </div>
-                <div class="friday">
-                     <span>5</span>
-                </div>
-                <div class="saturday">
-                     <span>6</span>
-                </div>
-
-               
-            </div>
+        
+            <ul class="buttons">
+              <li class="stream">Stream</li>
+              <li class="monday">Mon</li>
+              <li class="tuesday">Tue</li>
+              <li class="wednesday">Wed</li>
+              <li class="thursday">Thur</li>
+              <li class="friday">Fri</li>
+              <li class="saturday">Sat</li>
+              <li class="sunday">Sun</li>
+            </ul>
             <div class="nav-arrow">
                 <div class="prev"  >
-                     
+                     Up
                 </div>
                 <div class="next"  >
-                    
+                     Down
                </div>
             </div>
-    </div>
+    </nav>
  <!-- content area-->
     <div id="main">
+        <div class="logoContent">
+          <div class="container">
+           <div class="searchClass">
+            <input type="text" class="input-medium search-query">
+            <button type="submit" class="btn">Search</button>
+           </div>
+          </div>
+        </div>
         <div class="streamContent ">
           
             <div class="container">
@@ -68,7 +98,7 @@
         </div>
         <div class="mondayContent " id="check">
        
- <div class="container">
+          <div class="container">
             <div class="row">
                   <div class="span9" >
                    <h1>
@@ -76,8 +106,6 @@
                      <small>Stay Hungry,Stay Foolish</small>
                    </h1>
                   
-                  
-                   
                   </div>
                    <div class="span12" style="position:relative">
                       <div class="row">
@@ -139,14 +167,16 @@
                     </table>
                     
                     <div class="span16 detailsHidden1 details " >
-                      <div class="row">
+                      <div class="row part1">
                        <span class="itemTitle span2"><i class="icon-book icon-white"></i>CourseName:</span><span class="span10">Youku</span>
-                       <span class="itemTitle span2"><i class="icon-map-marker icon-white"></i>Place:</span><span class="span2">Youku</span>
-                       <span class="itemTitle span2"><i class="icon-user icon-white"></i>Teacher:</span><span class="span3">Youku</span>
+                      
+                       <span class="itemTitle span2"><i class="icon-user icon-white"></i>Teacher:</span><span class="span3">OBASang</span>
+                       <span class="itemTitle span2"><i class="icon-map-marker icon-white"></i>Place:</span><span class="span2">ClassRoom 5</span>
+                       <span class="span2 iphone_switch iphone_switch_off"></span>
                       </div>
-                      <div class="row" >
+                      <div class="row part2" >
                         <span class="span12 itemTitle"><i class="icon-heart icon-white"></i>Reason:</span>
-                        <div class="upReason span10" contenteditable>
+                        <div class="upReason span9" contenteditable>
                           I love this course because it's bla bla bla...
                           I love this course because it's bla bla bla...
                           I love this course because it's bla bla bla...
@@ -154,8 +184,10 @@
                           I love this course because it's bla bla bla...
 
                         </div>
-                        <a class="btn" href="#"><i class="icon-pencil"></i> Edit</a>
-                        <a class="btn" href="#"><i class="icon-remove"></i> Cancle</a>
+                        <div class="span3">
+                          <a class="btn edit" href="#"><i class="icon-pencil"></i> Edit</a>
+                          <a class="btn cancle" href="#"><i class="icon-remove"></i> Cancle</a>
+                        </div>
                         <div class="span12 progress progress-info
                              progress-striped active">
                           <div class="bar"
@@ -171,19 +203,23 @@
                         <div class="row">
                           
                           <div class="span3"  >
-                            <div><i class="icon-user icon-white"></i>:lanston</div>
-                            <div><i class="icon-comment icon-white"></i>:The teacher is damn funny 
+                            <div class="userName"><i class="icon-user icon-white "></i>:lanston</div>
+                            <div class="content"><i class="icon-comment icon-white"></i>:The teacher is damn funny 
                                 The teacher is damn funny 
                                 The teacher is damn funny 
                                 The teacher is damn funny 
                                 The teacher is damn funny 
-                                asdfowyeroiu
+                                asdfowyeroiuasdfowyeroiu
                                 Hope ZWS find her best things
+                                <div class="reviewVote">
+                                  <i class="icon-arrow-up icon-white"></i><span>100</span>
+                                  <i class="icon-arrow-down icon-white"></i><span>999</span>
+                                </div>
                             </div>
                           </div>
                           <div class="span3"  >
-                            <div><i class="icon-user icon-white"></i>:lanston</div>
-                            <div><i class="icon-comment icon-white"></i>:The teacher is damn funny 
+                            <div class="userName"><i class="icon-user icon-white"></i>:lanston</div>
+                            <div class="content"><i class="icon-comment icon-white"></i>:The teacher is damn funny 
                                 The teachasl;dfj,zvn,zxc
                                 sadfl;kj;
                                 asdklfj; funny 
@@ -191,15 +227,15 @@
                             </div>
                           </div>
                           <div class="span3"  >
-                            <div><i class="icon-user icon-white"></i>:lanston</div>
-                            <div><i class="icon-comment icon-white"></i>:The teacher is damn funny 
+                            <div class="userName"><i class="icon-user icon-white"></i>:lanston</div>
+                            <div class="content"><i class="icon-comment icon-white"></i>:The teacher is damn funny 
                                 T  
                                 The teacher is damn funny 
                             </div>
                           </div>
                           <div class="span3"  >
-                            <div><i class="icon-user icon-white"></i>:lanston</div>
-                            <div><i class="icon-comment icon-white"></i>:The teacher is damn funny 
+                            <div class="userName"><i class="icon-user icon-white"></i>:lanston</div>
+                            <div class="content"><i class="icon-comment icon-white"></i>:The teacher is damn funny 
                                 The teacher is damn funny 
                                 The teacher is damn funny 
                                 The teacher is damn funny 
@@ -245,63 +281,80 @@
             <div class="container">
               <div class="row">
                 <div class="span16">
-                  <form action="" class="form-stacked">
+                   <form class="form-horizontal">
                     <fieldset>
-                      <legend>Example form legend</legend>
-                      <div class="clearfix">
-                        <label for="xlInput3">X-Large input</label>
-                        <div class="input">
-                          <input class="xlarge" id="xlInput3" name="xlInput3" size="30" type="text">
+                      <legend>Add your recommended courses!</legend>
+                      <div class="control-group">
+                        <label class="control-label" for="input01">Course Name:</label>
+                        <div class="controls">
+                          <input type="text" class="input-xlarge" id="input01">
+                          <p class="help-block">Try your best to make the course name clearly so that other guys can know it</p>
                         </div>
-                      </div><!-- /clearfix -->
-                      <div class="clearfix">
-                        <label for="stackedSelect">Select</label>
-                        <div class="input">
-                          <select name="stackedSelect" id="stackedSelect">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                      </div>
+                      <div class="control-group">
+                         <label class="control-label" for="input01">Place:</label>
+                        <div class="controls">
+                          <input type="text" class="input-xlarge" id="input01">
+                          <p class="help-block">Where is it?</p>
+                        </div>
+                      </div>
+                      <div class="control-group">
+                         <label class="control-label" for="input01">Start Time:</label>
+                        <div class="controls">
+                          <input type="text" class="input-xlarge" id="input01">
+                          <select id="select01">
+                            <option>9:30</option>
+                            <option>GDUT</option>
+                            <option>GZ</option>
+                            <option>SYX</option>
+                            <option>UIC</option>
                           </select>
                         </div>
-                      </div><!-- /clearfix -->
-                    </fieldset>
-                    <fieldset>
-                      <legend>Example form legend</legend>
-                      <div class="clearfix error">
-                        <label for="xlInput4">X-Large input</label>
-                        <div class="input">
-                          <input class="xlarge error" id="xlInput4" name="xlInput4" size="30" type="text">
-                          <span class="help-inline">Small snippet of help text</span>
+                      </div>
+                       
+                      <div class="control-group">
+                        <label class="control-label" for="input01">End Time:</label>
+                        <div class="controls">
+                          <input type="text" class="input-xlarge" id="input01">
+                          <select id="select01">
+                            <option>GDUT</option>
+                            <option>GDUT</option>
+                            <option>GZ</option>
+                            <option>SYX</option>
+                            <option>UIC</option>
+                          </select>
                         </div>
-                      </div><!-- /clearfix -->
-                      <div class="clearfix">
-                        <label id="optionsCheckboxes">List of options</label>
-                        <div class="input">
-                          <ul class="inputs-list">
-                            <li>
-                              <label>
-                                <input type="checkbox" name="optionsCheckboxes" value="option1">
-                                <span>Option one is this and that—be sure to include why it’s great</span>
-                              </label>
-                            </li>
-                            <li>
-                              <label>
-                                <input type="checkbox" name="optionsCheckboxes" value="option2">
-                                <span>Option two can also be checked and included in form results</span>
-                              </label>
-                            </li>
-                          </ul>
-                          <span class="help-block">
-                            <strong>Note:</strong> Labels surround all the options for much larger click areas and a more usable form.
-                          </span>
+                      </div>
+                      <div class="control-group">
+                        <label class="control-label" for="select01">Choose Your School</label>
+                        <div class="controls">
+                          <select id="select01">
+                            <option>GDUT</option>
+                            <option>GDUT</option>
+                            <option>GZ</option>
+                            <option>SYX</option>
+                            <option>UIC</option>
+                          </select>
                         </div>
-                      </div><!-- /clearfix -->
+                      </div>
+                       
+                      <div class="control-group">
+                        <label class="control-label" for="fileInput">File input</label>
+                        <div class="controls">
+                          <input class="input-file" id="fileInput" type="file">
+                        </div>
+                      </div>
+                      <div class="control-group">
+                        <label class="control-label" for="textarea">Textarea</label>
+                        <div class="controls">
+                          <textarea class="input-xlarge" id="textarea" rows="3"></textarea>
+                        </div>
+                      </div>
+                      <!--<div class="form-actions">-->
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="reset" class="btn">Cancel</button>
+                      <!--</div>-->
                     </fieldset>
-                    <div class="actions">
-                      <button type="submit" class="btn primary">Save changes</button>&nbsp;<button type="reset" class="btn">Cancel</button>
-                    </div>
                   </form>
                 </div>
               </div>
@@ -330,18 +383,24 @@
             </div>
 
           </div>
-       </div>
-       <div class="wholeCourseOverlay">
+        </div>
+        <div class="wholeCourseOverlay">
           <div class="rightContent"></div>
           <div class="tooltips">
             <div class="backTo">Back</div>
             <a class="close">&times;</a>
           </div>
-       </div>
+        </div>
+        <div class="commentOverlay">
+          <header><h3>Speak out loudly</h3></header>
+          <section class="commentContent">
+            
+          </section>
+        </div>
     </div>
-     
+    <div id="tmpResult" style="display:none"></div>
     <script src="js/less-1.1.5.min.js" ></script>
-    <script src="js/pangting.js" type="text/javascript"></script>
+    <script src="js/pangting.js" type="text/javascriptt"></script>
 
     <script type="text/javascriptt">
       
@@ -398,9 +457,6 @@
         });
 
     </script>
-    <script>
-      pangting=new pangting();
-      pangting.init();
-    </script>
+     
   </body>
 </html>

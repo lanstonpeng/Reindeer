@@ -12,11 +12,19 @@
 
 */
 
+/*
+@@mixin
+*/
 .Transistion(@prop:all,@time:0.4s,@func:ease){
 	
 	-webkit-transition:@arguments;
 	-moz-transition:@arguments;
 	-o-transition:@arguments;
+}
+.BorderRadius(@r){
+	-moz-border-radius: @r;
+	-webkit-border-radius: @r;
+	border-radius: @r;
 }
 
 
@@ -36,7 +44,8 @@ body{
 @@Navigation Part
 */
 .navigation{
-	div{
+
+	div,li{
 		width: 50px; 
 		height: 50px;	
 	}
@@ -44,26 +53,35 @@ body{
 	.logo{
 		position: fixed;
 		top:0;
-		background:lightblue;
+		background:white;
+
 	}
 	.buttons{
-		
+		display: block;
 		font-size:12px;
+
 		color:white;
 		position: fixed;
 		top:20%;
-		div{
-			.Transistion(width,0.2s,ease-in);
+		list-style: none;
+		width:50px;
+		margin:0;
+		li{
+			.Transistion(all,0.2s,ease-in);
+			 
 			position: relative;
 			background:orange;
-			 
-			span{
-				position: relative;
-				 
-			}
+			float:left;
+			cursor:default;
+			display: block;	 
+			line-height:50px;
+			text-align:center;
+			
 		}
-		div:hover{
+		li:hover{
 			width:70px;
+			 
+			 
 		}
 
 		.stream{background-color: #3C81B5;}
@@ -73,11 +91,19 @@ body{
 		.thursday{background-color: #0C486C;}
 		.friday{background-color: #EB9605;}
 		.saturday{background-color: #FE4E50;}
+		.sunday{background-color:#541844;}
 	}
 	.nav-arrow{
 		position: fixed;
 		bottom:0;
 		background:green;
+		height:100px;
+		.prev{
+			background-color:#84C2B6;
+		}
+		.next{
+			background-color:#EDE6CE;
+		}
 	}
 }
 
@@ -95,6 +121,10 @@ body{
 		height:0px+@clientHeight;
 	}
 
+	.logoContent{
+		//background:url(img/pattern.png);
+		background-color:#005A78;
+	}
 	.streamContent{
 		background-color: #3C81B5;
 		 
@@ -135,7 +165,7 @@ body{
 		overflow:hidden;
 
 		tbody tr:hover{
-	
+			.Transistion(all,0.2s,ease-in);
 			background-color:lightblue;
 		}
 	}
@@ -157,14 +187,14 @@ body{
 		.leftContent{
 
 			height:100%;
-			width:97%;
+			width:96%;
 			background-color:#F3F2EE;
 			float:right;
 		}
 
 		.tooltips{
 			height:100%;
-			width:3%;
+			width:4%;
 			background-color:#213E4A;
 			float:left;
 			position:relative;
@@ -247,6 +277,24 @@ body{
 		}
 
 	}
+
+	.commentOverlay{
+		position: fixed;
+		height:100%;
+		width:150px;
+		right:0;
+		top:0;
+		background:grey;
+		opacity:0.8;
+		display:none;
+		header{
+			background-color:lightblue;
+			position: absolute;
+			width: 100%;
+			bottom: 0;
+		}
+
+	}
 		/*
 	@@about the course details
 	*/
@@ -264,11 +312,13 @@ body{
 
 	.detailsHidden1{
 		.Transistion(margin-left,0.4s,ease-in);
-		margin-left:960px !important;
+		margin-left:980px !important;
 	}
 	.detailsHidden2{
 		.Transistion(margin-left,0.4s,ease-out);
-		margin-left:-960px !important;
+		margin-left:-980px !important;
+
+		
 	}
 
 
@@ -279,10 +329,46 @@ body{
 		.itemTitle{
 			 
 		}
-
+		 
+		.row{
+			.iphone_switch{
+				height:18px; 
+				width:94px; 
+				background:url(img/iphone_switch.png);
+				background-position: 0px; 
+				float:right;
+				.BorderRadius(5px);
+				.Transistion(background-position,0.3s,ease-in);
+				cursor: pointer;
+			}
+			.iphone_switch_off{
+				background-position: -53px 50%;
+			}
+			.span3 .btn{  //the very two button : edit , cancle;
+				float:right;
+				&.cancle{
+					margin-right:10px;
+				}
+			}
+			.upReason{
+				padding: .1em 0 .6em 0;
+			}
+		}
+		.row.part1 span{
+			padding:.2em 0;
+		}
 		.reviews{
 			.span3{
-				background-color:#213E4A;
+				background-color:#213E4A;//@@warning:differ from slides;
+				div.userName{
+					 padding:0 .6em;
+				}
+				div.content{
+					padding:.2em .6em .6em;
+				}
+			}
+			.reviewVote{
+				float:right;
 			}
 
 		}
