@@ -1,13 +1,65 @@
 
-//@@Namespace:Functionality
+//@@Namespace:Functionality===================================================================================================
 var Functionality={
-	toArray : function(list) {
+	lookupJSON:function(json){
+		//I make a sugar here
+		//e.g:
+		//Functionality.lookupJSON(json).where('upNum=5'),but it's slow
+		//so,there's still a fast version here
+		//e.g:
+		//Functionality.lookupJSON(json).where('upNum',5)
+		if (json instanceof Array){
+			function _where(arg1,arg2){
+				if(arguments.length>1){
+					for(var i=0,len=json.length;i<len;i++){
+						if(json[i][arg1]==arg2){
+							return json[i];
+						}
+					}
+					return {};
+				}
+				else{ //sugar here!
+					/*
+					for(var i=0,len<json.length;i<len;i++){
+						var arg1=arguments[0].split('=')[0],
+							
+					}*/
+				}
+			}
+
+			return {
+				where:_where
+			}
+		}
+		else{
+			return json;
+		}
+
+		
+	},
+	toArray:function(list) {
  		return Array.prototype.slice.call(list || [], 0);
 	},
+
 	//store template here
 	templateCache:{},
+	//data modle caching 
+	//@@Namespace:Model Module
+	modelCache:{
+		course:{
+			/*
+			monday:{
+				
+			},
+			tuesday:{
+				
+			}*/
+		}
+		 
+	},
 	loadTemplateSync:function(options){
-		var that=this;
+		var that=this,
+			template="";
 		//See if we've already load this template
 		if(!that.templateCache[options.path]){
 			$.ajax({
@@ -18,14 +70,14 @@ var Functionality={
 				success:function(data){
 
 					that.templateCache[options.path]=data;
-					return data;
+					template=data;
 				}
 			});
 		}
 		else{
 			return that.templateCache[options.path];
 		}
-
+		return template;
 
 	},
 	loadTemplateAsync:function(options){
@@ -37,6 +89,11 @@ var Functionality={
 			});
 			
 		}
+	},
+	formatJsonForMustache:function(data){
+		console.log(JSON.stringify(data))
+		return JSON.parse('{"token":'+JSON.stringify(data)+"}");
+
 	},
 	getDay:function(dayNum){
 		switch(dayNum){
@@ -74,13 +131,15 @@ var Functionality={
 						destroy:"",
 						update:"",
 						showall:"",
-						gettable:"/courses/table/#day",
-						getalltable:""
+						gettable:"/courses/top/#day",
+						getalltable:"/courses/top/all/"
 
 					}
 				},
-				tmplate:{
-					courseTable:"templates/tmpl-course-table.js"
+				templatePath:{
+					courseTable:"templates/tmpl-course-table.js",
+					courseDetail:"templates/tmpl-course-details.js"
+					 
 				}
 			};
 
@@ -97,7 +156,8 @@ var Functionality={
 					data:options.data,
 					dataType:options.dataType||"JSON",
 					success:options.success||defaultSuccess,
-					beforeSend:options.beforeSend
+					beforeSend:options.beforeSend,
+					error:options.error
 				});
 			};
 
@@ -113,7 +173,7 @@ var Functionality={
 		})(),
 };
 
-
+//@Namespace:UI ===================================================================================================
 var UI={
 	bindTemplate:function(options){
 		var bindTarget=options.target;
@@ -121,31 +181,47 @@ var UI={
 	}
 };
 UI.Course=(function(){
-	var courseTable=$("table.courseTable");
-	var bindTable=function(options){
-		UI.bindTemplate(options);
-	};
-	var bindTableEvent=function(){
+	var courseTable=$("table.courseTable"),
+		couresDetailtemplatePath=Functionality.dataUtil.config.templatePath.courseDetail;
+	
+ 
+
+	function bindTableEvent(options){
+
+
 		courseTable.find("tbody tr").click(function(e){
 	 	 //@@Todo:clear it
-	      var details=$(this).parent().parent().parent().find(".details");
-	      
-	      if (details){
-	          //get the course id
-	          console.log(e.currentTarget)
-	        //show the details
+
+    	var details=$(this).parent().parent().parent().find(".details"),
+  			courseId=this.dataset.courseid;
+  		
+  		//bind course detail every time the user click the tr
+		(function bindCourseDetails(courseId,days){
+			var template=Functionality.loadTemplateSync({path:couresDetailtemplatePath}),
+				courseCache=Functionality.modelCache.course[days];
+				data=Functionality.lookupJSON(courseCache).where('id',courseId),
+				d=Mustache.render(template, data);
+			
+			$(details[0]).html(d);
+			 
+			
+		})(courseId,options.days);
+	     
+	     
+	      	  
+	    //The animation part
+	    if (details){
 	        if(details.hasClass("detailsHidden1")){
-	            console.log("remove") 
+	           
 	            $(details[0]).removeClass("detailsHidden1");
 	            $(details[1]).removeClass("detailsHidden2");
 	        }
 	        else{
-	          console.log("adding")
+	         
 	          $(details[0]).removeClass("detailsHidden1");
 	          $(details[1]).removeClass("detailsHidden2");
 	          $(details[0]).addClass("detailsHidden1");
 	          $(details[1]).addClass("detailsHidden2");
-	          //get data
 	          setTimeout(function(){
 	            $(details[0]).removeClass("detailsHidden1");
 	          	$(details[1]).removeClass("detailsHidden2");
@@ -153,49 +229,88 @@ UI.Course=(function(){
 	        }
 	      }	        	
 	    });
-	}
+	};
+
+	var bindTable=function(options){
+		UI.bindTemplate(options);
+
+		bindTableEvent(options);
+	};
+
 
 	return {
-		bindTableEvent:bindTableEvent,
+		//bindTableEvent:bindTableEvent,
 		bindTable:bindTable
+		//bindCourseDetails:bindCourseDetails
 	}
 
 })();
 
-//@@Namespace: Controller
+//@@Namespace: Controller===================================================================================================
 var DataContorller={};
 DataContorller.CourseController=(function(){
 	var dataUtil=Functionality.dataUtil,
-		template=Functionality.templateCache["templates/tmpl-course-table.js"];
-
+		couresTableTemplatePath=dataUtil.config.templatePath.courseTable;
+		
+		//template=Functionality.templateCache[couresTableTemplatePath];
+	
 	var getCoursesTableByDay=function(day){
-			//Load template Sync
-			Functionality.loadTemplateSync({path:"templates/tmpl-course-table.js"});
-			Functionality.loadTemplateSync({path:"templates/tmpl-course-tdetails.js"});
 
-			dataUtil.request({
-				type:"GET",
-				url:dataUtil.config.router.domain+dataUtil.config.router.course.gettable.replace("#day",day||1),
-				beforeSend:function(){
-					template=template||Functionality.templateCache["templates/tmpl-course-table.js"];
-					
-				},
-				success:function(data){
+			//Load template Sync
+			var template=Functionality.loadTemplateSync({path:couresTableTemplatePath});
+			/*
+			//not really necessary here,but maybe it works to imporve the speed somehow
+			Functionality.loadTemplateSync({path:couresDetailtemplatePath});
+			*/
+			var days=Functionality.getDay(day);
+
+			function _success(data){
+				 	//console.log(data,template);
+				 	//cache the course data
+				 	Functionality.modelCache.course[days]=data;
+
+					data=Functionality.formatJsonForMustache(data);
+
 				 	var d=Mustache.render(template, data),
-				 		days=Functionality.getDay(day),
 				 		target=$("."+days+"Content .courseTable tbody");
+				 	
+				  
+
+
 				 	//That's the View taking place
-				 	UI.Course.bindTable({content:d,target:target});
-				 	UI.Course.bindTableEvent();
-				}
-				});	
-				//bind data to template
-				//dataUtil.bindTemplate({path});
-				//bind event
-			},
+				 	UI.Course.bindTable({content:d,target:target,days:days});
+				 	//UI.Course.bindTableEvent();
+			};
+
+			//check if there's a cache here,but worth nothing at this moment
+			
+
+			if (!Functionality.modelCache.course[days]){
+				dataUtil.request({
+					type:"GET",
+					url:dataUtil.config.router.domain+dataUtil.config.router.course.gettable.replace("#day",day||1),
+					beforeSend:function(){
+						//console.log(this.url);
+						//template=template||Functionality.templateCache[couresTableTemplatePath];
+					},
+					success:_success,
+					error:function(e){
+						console.log("course table request error[e.responseText]: ",e.responsText);
+					}
+				});					
+
+			}
+			else{
+				_success(Functionality.modelCache.course[days])
+
+			}
+
+				
+		},//---getCoursesTableByDay end ---
+
 		getAllTopCoursesTable=function(){
-			Functionality.loadTemplateSync({{path:"templates/tmpl-course-table.js"}});
-		},
+			Functionality.loadTemplateSync({path:couresTableTemplatePath});
+		};
 
 
 	
@@ -207,18 +322,9 @@ DataContorller.CourseController=(function(){
 
 })();
 
-//@@Namespace:Model Module
-var metaDataModel={
-	//Course Module
-	course:function(options){
-		this.name=options.name||"";
- 
-	}
-
-};
 
 
-//Core,only pangting object expose to the global envirnment 	
+//Core,only pangting object expose to the global envirnment ===================================================================================================
 window.pangting=(function(){
 		//config table
 		var constants={
@@ -243,6 +349,9 @@ window.pangting=(function(){
 			Functionality.dataUtil.getProgress(); //just for desmontration,will be clear
 
 			DataContorller.CourseController.getCoursesTableByDay(1);
+
+
+
 			//init the necessary elements,variables
 			var sideBarBtn=$("ul.buttons"),
 				logoBtn=$(".navigation .logo"),
@@ -258,12 +367,14 @@ window.pangting=(function(){
         
 	        //navgation,a bit ugly here
 	        function _navDelegate(e){
-	        	console.log($(this).attr('class'))
-	            $( "."+$(this).attr('class')+"Content" ).ScrollTo({
-	                            duration: constants.navTime
-	                           
-	              });	        	
-	        }
+	        	//console.log($(this).attr('class'))
+	        	 
+	             
+	            $.scrollTo($( "."+$(this).attr('class')+"Content" ),{
+	                            duration: constants.navTime,
+	                            easing:'jswing'          
+	            });
+	        };
 	        sideBarBtn.children().click(_navDelegate);
 	        logoBtn.on("click",_navDelegate); //logo needs navigtion,too
 
@@ -301,38 +412,38 @@ window.pangting=(function(){
 	           return false;
 	        });
 
-	        //courseTable Click EventBinding
-	        courseTable.find("tbody tr").click(function(e){
-         	 //@@Todo:clear it
-	          var details=$(this).parent().parent().parent().find(".details");
+	        // //courseTable Click EventBinding
+	        // courseTable.find("tbody tr").click(function(e){
+         // 	 //@@Todo:clear it
+	        //   var details=$(this).parent().parent().parent().find(".details");
 	          
-	          if (details){
-	              //get the course id
-	              console.log(e.currentTarget)
-	            //show the details
-	            if(details.hasClass("detailsHidden1")){
-	                console.log("remove") 
-	                $(details[0]).removeClass("detailsHidden1");
-	                $(details[1]).removeClass("detailsHidden2");
-	            }
-	            else{
-	              console.log("adding")
-	              $(details[0]).removeClass("detailsHidden1");
-	              $(details[1]).removeClass("detailsHidden2");
-	              $(details[0]).addClass("detailsHidden1");
-	              $(details[1]).addClass("detailsHidden2");
-	              //get data
-	              setTimeout(function(){
-	                $(details[0]).removeClass("detailsHidden1");
-	              	$(details[1]).removeClass("detailsHidden2");
-	              },500); 
+	        //   if (details){
+	        //       //get the course id
+	        //       console.log(e.currentTarget)
+	        //     //show the details
+	        //     if(details.hasClass("detailsHidden1")){
+	        //         console.log("remove") 
+	        //         $(details[0]).removeClass("detailsHidden1");
+	        //         $(details[1]).removeClass("detailsHidden2");
+	        //     }
+	        //     else{
+	        //       console.log("adding")
+	        //       $(details[0]).removeClass("detailsHidden1");
+	        //       $(details[1]).removeClass("detailsHidden2");
+	        //       $(details[0]).addClass("detailsHidden1");
+	        //       $(details[1]).addClass("detailsHidden2");
+	        //       //get data
+	        //       setTimeout(function(){
+	        //         $(details[0]).removeClass("detailsHidden1");
+	        //       	$(details[1]).removeClass("detailsHidden2");
+	        //       },500); 
 	               
 	                   
-	            }
+	        //     }
 
-	          }	        	
+	        //   }	        	
 
-	        });
+	        // });
 
 	        //add Review btn
 	        addReviewBtn.click(function(e){
@@ -372,62 +483,4 @@ window.pangting=(function(){
 
 		}
 })();
-
-
-
-/*
-//extend Functionality
-Functionality.toArray = function(list) {
-  return Array.prototype.slice.call(list || [], 0);
-};
-Functionality.getDay=function(dayNum){
-	switch(dayNum){
-		case 1:
-			return "monday";
-		case 2:
-			return "tuesday";
-		case 3:
-			return "wednesday";
-		case 4:
-			return "thrusday";
-		case 5:
-			return "friday";
-		case 6:
-			return "saturday";
-		case 7:
-			return "sunday";
-		case 0:
-			return "stream";
-			
-	}
-}
-Functionality.loadTemplateAsync=function(options){
-	if(!Functionality.templateCache[options.path]){
-		$("#tmpResult").load(options.path,function(){
-			Functionality.templateCache[options.path]=$("#tmpResult").html();
-			options.callback&&options.callback();
-		});
-		
-	}
-};
-Functionality.loadTemplateSync=function(options){
-		
-		//See if we've already load this template
-		if(!Functionality.templateCache[options.path]){
-			$.ajax({
-				type:"GET",
-				async:false,
-				url:options.path,
-				dataType:"text",
-				success:function(data){
-
-					Functionality.templateCache[options.path]=data;
-					return data;
-				}
-			});
-		}
-		else{
-			return Functionality.templateCache[options.path];
-		}
-}*/
 
