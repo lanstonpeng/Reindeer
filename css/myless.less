@@ -1,4 +1,92 @@
+@-webkit-keyframes dotPulse{       
+	0% {
+		-webkit-transform: scale(0);   
+		opacity: 0;
+	}
+	8% {
+		-webkit-transform: scale(0);   
+		opacity: 0;
+	}
+	15% {
+		-webkit-transform: scale(0.1);   
+		opacity: 0.8;
+	}
+	30% {
+	  -webkit-transform: scale(0.5);
+	  opacity: 0.2;
+	}
+	100% {
+	  opacity: 0;
+	  border: 10px solid #ffffff;
+		-webkit-transform: scale(1);
+	}
+}
 
+
+@-moz-keyframes dotPulse
+	{       
+	0% {
+		-moz-transform: scale(0);   
+		opacity: 0;
+	}
+	8% {
+		-moz-transform: scale(0);   
+		opacity: 0;
+	}
+	15% {
+		-moz-transform: scale(0.1);   
+		opacity: 0.8;
+	}
+	30% {
+	  -moz-transform: scale(0.5);
+	  opacity: 0.2;
+	}
+	100% {
+	  opacity: 0;
+	  border: 10px solid #ffffff;
+		-moz-transform: scale(1);
+	}
+}
+
+.logo{
+	.dot_pulse{
+		margin: 0 auto;
+		width: 70px;
+		height: 70px;
+		border-radius: 100px;
+		position: absolute;
+		right: -35px;
+		top: -35px;
+		z-index: 10;
+		background-color: transparent;
+		border: 10px solid #91C758;
+		-webkit-animation-name: dotPulse;
+		-moz-animation-name: dotPulse;
+		-webkit-animation-duration: 2s;
+		-moz-animation-duration: 2s;
+		-webkit-animation-iteration-count: infinite;
+		-moz-animation-iteration-count: infinite;
+		-webkit-animation-timing-function: linear;
+		-moz-animation-timing-function: linear;
+		opacity: 0.2;
+		border-top-left-radius: 100px 100px;
+		border-top-right-radius: 100px 100px;
+		border-bottom-right-radius: 100px 100px;
+		border-bottom-left-radius: 100px 100px;
+	}
+	.dot{
+		width: 10px;
+		height: 10px;
+		border-radius: 20px;
+		-webkit-border-radius: 20px;
+		position: absolute;
+		top: -5px;
+		right: -5px;
+		background-color: #5B9919;
+		z-index: 50;
+		border: 10px solid #EEF5E8;
+	}
+}
 /*
 @@Rest
 ---------------------------------------------------------
@@ -16,7 +104,9 @@
 @@mixin
 */
 .Transistion(@prop:all,@time:0.4s,@func:ease){
-	
+	-webkit-transform:translateZ(0);
+	-moz-transform:translateZ(0);
+	-o-transform:translateZ(0);
 	-webkit-transition:@arguments;
 	-moz-transition:@arguments;
 	-o-transition:@arguments;
@@ -125,6 +215,7 @@ body{
 		//background:url(img/pattern.png);
 		background-color:#005A78;
 	}
+
 	.streamContent{
 		background-color: #3C81B5;
 		 
@@ -154,6 +245,9 @@ body{
 		background-color: #FE4E50;
 		 
 	}
+	.sundayContent{
+		background-color: #541844;
+	}
 	/*
 		@@courseTable
 	*/
@@ -164,9 +258,14 @@ body{
 		z-index:2;
 		overflow:hidden;
 
+	
+	
 		tbody tr:hover{
+			cursor: default;
 			.Transistion(all,0.2s,ease-in);
 			background-color:lightblue;
+
+
 		}
 	}
 	/*
@@ -190,6 +289,28 @@ body{
 			width:96%;
 			background-color:#F3F2EE;
 			float:right;
+
+			.addCourseName{
+				float:left ;	
+			}
+
+			.addCourseSchool{
+				float:left;
+				margin-left:10px;
+				display: inline-block;
+			}
+			.addCourseSchool+p{
+				clear:both;
+			}
+
+			.addCourseBtnArea{
+				background-color:transparent;
+				padding: 17px 20px 18px;
+				margin-top: 18px;
+				margin-bottom: 18px;
+				border-top: 1px solid #DDD;
+				padding-left: 160px;
+			}
 		}
 
 		.tooltips{
@@ -204,6 +325,7 @@ body{
 				cursor:pointer;
 				
 			}
+
 		}
 	}
 
@@ -278,7 +400,7 @@ body{
 
 	}
 
-	.commentOverlay{
+	.remarkOverlay{
 		position: fixed;
 		height:100%;
 		width:150px;
@@ -293,6 +415,21 @@ body{
 			width: 100%;
 			bottom: 0;
 		}
+		.addRemarkArea{
+			position: absolute;
+			bottom:3em;
+			input {
+				margin-bottom:2px;
+			}
+		}
+		.remarkContent{
+			background-color:orange;
+			
+			.remarkItem{
+				background-color:green;
+			}
+		}
+
 
 	}
 		/*
@@ -353,6 +490,10 @@ body{
 			.upReason{
 				padding: .1em 0 .6em 0;
 			}
+			.itemEditing{
+				box-shadow: 0px 1px 0px white;
+				outline:none;
+			}
 		}
 		.row.part1 span{
 			padding:.2em 0;
@@ -374,10 +515,29 @@ body{
 		}
 		.progress{
 			margin-top:10px;
+			position: relative;
+			.bar{
+				.Transistion(width,0.5s,ease-in-out);
+			}
+
+			#tempholder{
+				height:18px;
+				width:5px;
+				position: absolute;
+
+			}
 		}
 		.progressDetails{
 			margin-top:-20px;
-		}
+			position: relative;
+
+			.progressComments{
+					opacity:1;
+					position: absolute;
+					width:5px;
+					top:2px;
+				}
+			}
 
 	}
 
@@ -388,7 +548,28 @@ body{
 		bottom:0;
 		right:0;
 	}
-	
+
+	.icon-arrow-up{
+		.Transistion(all,0.2s,ease-out);
+		cursor:pointer;
+
+	}
+	.icon-arrow-up:hover{
+		-webkit-transform: scale(1.2) translateY(-3px);
+		-moz-transform:scale(1.2) translateY(-3px);
+		-o-transform:scale(1.2) translateY(-3px);
+
+	}
+
+	.icon-arrow-down{
+		.Transistion(all,0.2s,ease-out);
+	}
+	.icon-arrow-down:hover{
+		cursor:pointer;
+		-webkit-transform: scale(1.2) translateY(3px);
+		-moz-transform:scale(1.2) translateY(3px);
+		-o-transform:scale(1.2) translateY(3p);
+	}
 
 	
 }

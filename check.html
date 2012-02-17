@@ -2,10 +2,10 @@
 <html lang="en">
   <head>
    
-    <title>PangTime.Me</title>
+    <title>PangTing.Me</title>
     
-    <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
-	<link type="text/css" rel="stylesheet/less" href="css/myless.less">
+     <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
+	   <link type="text/css" rel="stylesheet/less" href="css/myless.less">
      <script type="text/javascript" src="js/jquery.1.7.1-min.js"></script>
      <script pe="text/javascript" src="js/bootstrap.min.js"></script>
    
@@ -14,41 +14,12 @@
      <script src="js/jquery-ui-1.8.17.custom.min.js"></script>
      <script src="js/bootstrap-tooltip.js"></script>
      <script src="js/mustache.js"></script>
-     <script>
-          var sloader=(function(){
-              var doch=document.head;
-              var process=function(target,callback){
-                var tag=document.createElement("script");
-                tag.type="text/javascript";
-                tag.src=target;
-                tag.onload=function(){
-                  callback&&callback();
-                }
-                doch.appendChild(tag);
+     <script src="js/core/Functionality.js"></script>
+     <script src="js/core/pangTingUI.js"></script>
+     <script src="js/core/pangTingController.js"></script>
+     
+     <script src="js/pangting.js"></script>
 
-              }
-
-              
-
-              return {
-                load:function(arr,callback){
-                  for(var i=0,len=arr.length;i<len;i++){
-                    process(arr[i],callback)
-                  }
-                                 
-                }
-              }
-          })();
-
-          sloader.load(["js/pangting.js"],function(){
-            
-             
-            
-            
-            pangting.init();
-          });
-
-     </script>
   </head>
 
   <body>
@@ -56,7 +27,14 @@
   <nav class="navigation">
             
             <div class="logo">
-                Logo
+                <a href="/">
+                   <div class="dot_pulse">
+                    &nbsp;
+                  </div>
+                  <div class="dot">
+                    &nbsp;
+                  </div>
+                </a>
             </div>
         
             <ul class="buttons">
@@ -103,15 +81,15 @@
                   <div class="span9" >
                    <h1>
                      Monday
-                     <small>Stay Hungry,Stay Foolish</small>
+                     <small>Let's roll!</small>
                    </h1>
                   
                   </div>
                    <div class="span12" style="position:relative">
                       <div class="row">
                         <blockquote class="span6">
-                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
-                          <small>Dr. Julius Hibbert</small>
+                          <p>The key feature of this update is making Boilerplate smaller. Most of the changes have been working towards that. </p>
+                          <small>Mickael Daniel</small>
                         </blockquote>
                         <div class=" addCourse">
                          
@@ -125,9 +103,9 @@
                         <thead>
                           <tr>
                             <!--<th>Place</th>-->
-                            <th>CouresName</th>
-                            <th>Hot</th>
-                            <th>teacher</th>
+                            <th>Coures Name</th>
+                            <th>Start Time</th>
+                            <th>Teacher</th>
                             <th>Vote me!</th>
                           </tr>
                         </thead>
@@ -267,10 +245,131 @@
 
          </div>
         <div class="tuesdayContent">
-              <div class="span6" style="background:orange">asdf </div>
+          <div class="container">
+                <div class="row">
+                  <div class="span9" >
+                   <h1>
+                     Tuesday
+                     <small>Stay Hungry,Stay Foolish</small>
+                   </h1>
+                  
+                  </div>
+
+                   <div class="span12" style="position:relative">
+                      <div class="row">
+                        <blockquote class="span6">
+                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                          <small>Dr. Julius Hibbert</small>
+                        </blockquote>
+                        <div class=" addCourse">
+                         
+                         <a class="btn addCourseBtn" href="#"><i class="icon-plus"></i>Add Course</a>
+                         <a class="btn seeAllCourses" href="#"><i class="icon-inbox"></i>See All </a>
+                        </div>
+                      </div>
+                   </div>
+                  
+                    <table class="courseTable table">
+                        <thead>
+                          <tr>
+                            <!--<th>Place</th>-->
+                            <th>Coures Name</th>
+                            <th>Start Time</th>
+                            <th>Teacher</th>
+                            <th>Vote me!</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                    
+                    <div class="span16 detailsHidden1 details " >
+
+                    </div>
+                    <div class="span16 detailsHidden2 details " >
+                      <div class="reviews">
+                        <div class="row">
+                          
+                        </div>
+
+                       
+                        
+                      </div>
+                      <div class="row">    
+                        
+                        <a class="btn addReviewBtn" href="#"><i class="icon-plus"></i>Add Review</a>
+                        <a class="btn seeMoreReviewBtn" href="#"><i class="icon-eye-open"></i>See More</a>
+                      </div>
+                      
+                 
+                    </div>
+                </div>
+          </div>
+                        
         </div>
         <div class="wednesdayContent">
-              <div class="span6" style="background:orange">asdf </div>
+          <div class="container">
+                <div class="row">
+                  <div class="span9" >
+                   <h1>
+                     Tuesday
+                     <small>Stay Hungry,Stay Foolish</small>
+                   </h1>
+                  
+                  </div>
+
+                   <div class="span12" style="position:relative">
+                      <div class="row">
+                        <blockquote class="span6">
+                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                          <small>Dr. Julius Hibbert</small>
+                        </blockquote>
+                        <div class=" addCourse">
+                         
+                         <a class="btn addCourseBtn" href="#"><i class="icon-plus"></i>Add Course</a>
+                         <a class="btn seeAllCourses" href="#"><i class="icon-inbox"></i>See All </a>
+                        </div>
+                      </div>
+                   </div>
+                  
+                    <table class="courseTable table">
+                        <thead>
+                          <tr>
+                            <!--<th>Place</th>-->
+                            <th>Coures Name</th>
+                            <th>Start Time</th>
+                            <th>Teacher</th>
+                            <th>Vote me!</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                    
+                    <div class="span16 detailsHidden1 details " >
+
+                    </div>
+                    <div class="span16 detailsHidden2 details " >
+                      <div class="reviews">
+                        <div class="row">
+                          
+                        </div>
+
+                       
+                        
+                      </div>
+                      <div class="row">    
+                        
+                        <a class="btn addReviewBtn" href="#"><i class="icon-plus"></i>Add Review</a>
+                        <a class="btn seeMoreReviewBtn" href="#"><i class="icon-eye-open"></i>See More</a>
+                      </div>
+                      
+                 
+                    </div>
+                </div>
+          </div>
         </div>
         <div class="thursdayContent">
           <div class="span6" style="background:orange">sdfasdf </div>
@@ -281,86 +380,136 @@
         <div class="saturdayContent">
             <div class="span6" style="background:orange">fdasdfasd </div>
         </div>
+        <div class="sundayContent">
+                <div class="container">
+                  <div class="row">
+                  <div class="span9" >
+                   <h1>
+                     Tuesday
+                     <small>Stay Hungry,Stay Foolish</small>
+                   </h1>
+                  
+                  </div>
+
+                   <div class="span12" style="position:relative">
+                      <div class="row">
+                        <blockquote class="span6">
+                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+                          <small>Dr. Julius Hibbert</small>
+                        </blockquote>
+                        <div class=" addCourse">
+                         
+                         <a class="btn addCourseBtn" href="#"><i class="icon-plus"></i>Add Course</a>
+                         <a class="btn seeAllCourses" href="#"><i class="icon-inbox"></i>See All </a>
+                        </div>
+                      </div>
+                   </div>
+                  
+                    <table class="courseTable table">
+                        <thead>
+                          <tr>
+                            <!--<th>Place</th>-->
+                            <th>Coures Name</th>
+                            <th>Start Time</th>
+                            <th>Teacher</th>
+                            <th>Vote me!</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                    
+                    <div class="span16 detailsHidden1 details " >
+
+                    </div>
+                    <div class="span16 detailsHidden2 details " >
+                      <div class="reviews">
+                        <div class="row">
+                          
+                        </div>
+
+                       
+                        
+                      </div>
+                      <div class="row">    
+                        
+                        <a class="btn addReviewBtn" href="#"><i class="icon-plus"></i>Add Review</a>
+                        <a class="btn seeMoreReviewBtn" href="#"><i class="icon-eye-open"></i>See More</a>
+                      </div>
+                      
+                 
+                    </div>
+                </div>
+          </div>  
+        </div>
+
         <div class="courseOverlay addCourseArea">
           <div class="leftContent">
             <div class="container">
               <div class="row">
                 <div class="span16">
-                   <form class="form-horizontal">
-                    <fieldset>
+                   <div class="form-horizontal">
+                    
                       <legend>Add your recommended courses!</legend>
-                      <div class="control-group">
+                      <div class="control-group ">
                         <label class="control-label" for="input01">Course Name:</label>
                         <div class="controls">
-                          <input type="text" class="input-xlarge" id="input01">
+                          <input type="text" class="input-xlarge addCourseName" />
+                            <div class="btn-group addCourseSchool">
+                              <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">GDUT <span class="caret"></span></a>
+                              <ul class="dropdown-menu">
+                                <li><a href="#">UIC</a></li>
+                                <li><a href="#">MIT</a></li>
+                                <li><a href="#">NYU</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                              </ul>
+                            </div>
                           <p class="help-block">Try your best to make the course name clearly so that other guys can know it</p>
                         </div>
+
                       </div>
                       <div class="control-group">
                          <label class="control-label" for="input01">Place:</label>
                         <div class="controls">
-                          <input type="text" class="input-xlarge" id="input01">
+                          <input type="text" class="input-medium addCoursePlace" >
                           <p class="help-block">Where is it?</p>
                         </div>
                       </div>
                       <div class="control-group">
+                         <label class="control-label" for="input01">Teacher:</label>
+                        <div class="controls">
+                          <input type="text" class="input-medium addCourseTeacher" >
+                          <p class="help-block">Who take it?</p>
+                        </div>
+                      </div>              
+                      <div class="control-group">
                          <label class="control-label" for="input01">Start Time:</label>
                         <div class="controls">
-                          <input type="text" class="input-xlarge" id="input01">
-                          <select id="select01">
-                            <option>9:30</option>
-                            <option>GDUT</option>
-                            <option>GZ</option>
-                            <option>SYX</option>
-                            <option>UIC</option>
-                          </select>
+                          <input type="date"  class="input-small addCourseStartTime" >
+                           
                         </div>
                       </div>
                        
                       <div class="control-group">
                         <label class="control-label" for="input01">End Time:</label>
                         <div class="controls">
-                          <input type="text" class="input-xlarge" id="input01">
-                          <select id="select01">
-                            <option>GDUT</option>
-                            <option>GDUT</option>
-                            <option>GZ</option>
-                            <option>SYX</option>
-                            <option>UIC</option>
-                          </select>
+                          <input type="text" class="input-small addCourseEndTime" >
                         </div>
                       </div>
                       <div class="control-group">
-                        <label class="control-label" for="select01">Choose Your School</label>
+                        <label class="control-label" for="textarea">Reason:</label>
                         <div class="controls">
-                          <select id="select01">
-                            <option>GDUT</option>
-                            <option>GDUT</option>
-                            <option>GZ</option>
-                            <option>SYX</option>
-                            <option>UIC</option>
-                          </select>
+                          <textarea class="input-xlarge addCourseReason"  rows="3"></textarea>
                         </div>
                       </div>
-                       
-                      <div class="control-group">
-                        <label class="control-label" for="fileInput">File input</label>
-                        <div class="controls">
-                          <input class="input-file" id="fileInput" type="file">
-                        </div>
+                      <div class="addCourseBtnArea"> 
+                        <button  class="btn btn-primary addCourseSave">Save changes</button>
+                        <button  class="btn clearlAddCourse">Clear</button>
                       </div>
-                      <div class="control-group">
-                        <label class="control-label" for="textarea">Textarea</label>
-                        <div class="controls">
-                          <textarea class="input-xlarge" id="textarea" rows="3"></textarea>
-                        </div>
-                      </div>
-                      <!--<div class="form-actions">-->
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                        <button type="reset" class="btn">Cancel</button>
-                      <!--</div>-->
-                    </fieldset>
-                  </form>
+                   
+                  </div>
                 </div>
               </div>
             </div>
@@ -372,23 +521,27 @@
         </div>
         <div class="reviewOverlay">
           <div class="ReviewArea">
-            <span>Some Reviews here</span>
-          </div>
-          <div class="addReviewArea">
-            <a class="close">&times;</a>
-              <div class="span2">
-              <label class="control-label" for="prependedInput">Prepended text</label>
-              <div class="controls">
-                <div class="input-prepend">
-                  <span class="add-on">@</span>
-                  <input class="span2" id="prependedInput" size="16" type="text">
-                </div>
-                <p class="help-block">Here's some help text</p>
-              </div>
-            </div>
 
           </div>
+          <div class="addReviewArea ">
+            <a class="close">&times;</a>
+            <div class="row">
+              <div class="span2 offset1">
+                <input type="text" class="input-medium" placeholder="userName"/>              
+                <input type="text" class="input-medium" placeholder="Content"/>
+                <button class="btn-primary addRemarkBtn">OK</button>
+                <button class="btn-primary removeRemarkBtn">Nope</button>                
+              </div>
+              <div class="span12">
+                <label>Note that:</label>
+                <div>Some licencs here in order to threaten the users:
+                  Mass distributed software is used by individuals on personal computers under license from the developer of that software. Such license is typically included in a more extensive end-user license agreement (EULA) entered into upon the installation of that software on a computer. Typically, a license is associated with a unique code, that when approved grants the end user access to the software in question.
+Under a typical end-user license agreement, the user may install the software on a limited number of computers.
+                 </div>
+              </div>
+            </div>
         </div>
+      </div>
         <div class="wholeCourseOverlay">
           <div class="rightContent"></div>
           <div class="tooltips">
@@ -396,72 +549,48 @@
             <a class="close">&times;</a>
           </div>
         </div>
-        <div class="commentOverlay">
+        <div class="remarkOverlay">
           <header><h3>Speak out loudly</h3></header>
-          <section class="commentContent">
+          <section class="remarkContent">
+              <div class="remarkItem">
+                <h5>userName</h5>
+                <div>what is goning on here </div>
+              </div>
+          </section>
+          <section class="addRemarkArea">
             
+            <input type="text" class="input-medium" placeholder="userName"/>
+             
+            <input type="text" class="input-medium" placeholder="Content"/>
+            <button class="btn-small addRemarkBtn">OK</button>
+            <button class="btn-small removeRemarkBtn">Nope</button>
           </section>
         </div>
     </div>
     <div id="tmpResult" style="display:none"></div>
     <script src="js/less-1.1.5.min.js" ></script>
-    <script src="js/pangting.js" type="text/javascriptt"></script>
-
-    <script type="text/javascriptt">
-      
-        //navigation bar scroll
-        var sideBtn=$("div.buttons")
-        sideBtn.children().click(function(e){
-           
-            $( "."+$(this).attr('class')+"Content" ).ScrollTo({
-                            duration: 400
-                           
-              });
-        });
-        
-        $(".btn[value='Add Course']").click(function(e){
-          $(".overlay").show("slide", { direction: "left",easing:"easeOutQuint" }, 600); 
-
-        });
-         
-        $(".overlay .backTo").click(function(e){
-          $(".overlay").hide("slide", { direction: "left" }, 400); 
-        })
-        //Data binding  
-         
-        $('tr').click(function(e){
-          
-
-          //@@Todo:clear it
-          var details=$(this).parent().parent().parent().find(".details");
-          
-          if (details){
-              //get the course id
-              console.log(e.currentTarget)
-            //show the details
-            if(details.hasClass("detailsHidden")){
-                console.log("remove") 
-                details.removeClass("detailsHidden");
-
-            }
-            else{
-              console.log("adding")
-              details.removeClass("detailsHidden");
-              details.addClass("detailsHidden");
-              //get data
-              setTimeout(function(){
-                details.removeClass("detailsHidden");
-              },500); 
-               
-                   
-            }
-
-          }
-          
-
-        });
-
-    </script>
      
+
+     <script type="text/javascript">
+ 
+            
+            pangting.init();
+
+     </script>
+     <script type="text/javascript" src="js/core/workerPartner.js"></script>
+<div class="modal fade" id="modalMsg" style="display:none">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>I know there's someone like you</h3>
+  </div>
+  <div class="modal-body">
+    <p>You know, over voting is bad~</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-primary" data-dismiss="modal">Yeah,I got it</a>
+    <a href="#" class="btn" onclick="return false" >Go fishing </a>
+  </div>
+</div>
+
   </body>
 </html>

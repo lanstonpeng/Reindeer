@@ -1,0 +1,2 @@
+class ProgressCommentsController < ApplicationController
+end

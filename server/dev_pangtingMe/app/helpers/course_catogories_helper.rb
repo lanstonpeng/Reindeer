@@ -1,0 +1,2 @@
+module CourseCatogoriesHelper
+end

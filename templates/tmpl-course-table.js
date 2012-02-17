@@ -2,7 +2,7 @@
 <tr data-courseid={{id}}>
   <!--<td>{{place}}</td>-->
   <td>{{courseName}}</td>
-  <td>{{upNum}}</td>
+  <td>{{startTime}}</td>
   <td>{{teacher}}</td>
   <td>
 	  <i class="icon-arrow-up icon-white"></i><span>{{upNum}}</span>
