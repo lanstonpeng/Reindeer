@@ -134,7 +134,7 @@ DataContorller.CourseController=(function(){
 				courseId=options.courseId,
 				reviewIdentity="review"+courseId;
 				
-			Functionality.modelCache.courseReviews["review"+courseId+"NeedUpdated"] || Functionality.modelCache.courseReviews["review"+courseId+"NeedUpdated"]=false;
+			//Functionality.modelCache.courseReviews["review"+courseId+"NeedUpdated"] || Functionality.modelCache.courseReviews["review"+courseId+"NeedUpdated"]=false;
 			 
 			function _success(data){
 				Functionality.modelCache.courseReviews[reviewIdentity]=data;
