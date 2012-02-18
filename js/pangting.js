@@ -90,11 +90,25 @@ window.pangting=(function(){
 
 
 	        //add Review btn
-	        addReviewBtn.click(function(e){
-	        	$(".reviewOverlay").show();
-	        	$(".addReviewArea").slideDown(constants.defaultTime,"easeOutExpo");
-	        	return false
+	        addReviewBtn.on("click",function(e){
+	        	var courseId=$(this).closest(".details").parent().find(".part1 .span10").attr("data-courseid");
+
+	        	 
+	        	UI.AddReview.bindEvent({
+	        		courseId:courseId
+	        	});
+
+	        	return false;
 	        });
+	        /*
+	        $(".addReviewArea").click(function(e){
+	        	var addArea=$(".addReviewArea"),
+	        		reviewArea=$(".ReviewArea");
+	        	reviewArea && reviewArea.slideUp(constants.defaultTime,"easeOutQuint");
+	        	addArea && addArea.slideUp(constants.defaultTime,"easeOutQuint",function(){
+	        		$(".reviewOverlay").hide();
+	        	});
+	        });*/
 
 	        //see All Reviews Btn
 	        seeMoreReviewBtn.click(function(e){
@@ -106,14 +120,7 @@ window.pangting=(function(){
 	        	$(".addReviewArea,.ReviewArea").slideDown(constants.defaultTime,"easeOutExpo");
 	        	return false;
 	    	});
-	        $(".addReviewArea").click(function(e){
-	        	var addArea=$(".addReviewArea"),
-	        		reviewArea=$(".ReviewArea");
-	        	reviewArea && reviewArea.slideUp(constants.defaultTime,"easeOutQuint");
-	        	addArea && addArea.slideUp(constants.defaultTime,"easeOutQuint",function(){
-	        		$(".reviewOverlay").hide();
-	        	});
-	        });
+
 
 		}
 		

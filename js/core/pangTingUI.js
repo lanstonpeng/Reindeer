@@ -119,10 +119,11 @@ UI.CourseDetail=(function(){
 			template:template
 		});
 
-		_bindCourseDeatilsEvent({
-			target:options.target
+		_bindCourseDeatilsEvent(options);
+		UI.Progress.bindEditable({
+			days:options.days,
+			courseId:options.courseId
 		});
-		UI.Progress.bindEditable({days:options.days});
 		$('.progressComments').tooltip(); 
 	}
 
@@ -154,6 +155,24 @@ UI.CourseDetail=(function(){
 
 		options.target.find($("a.edit")).on("click",function(){
 			$(this).html('<i class="icon-edit"></i>Save' );
+			$(this).on("click",function(e){
+				 
+				 //##warning,no all item can be updated ,depends on the current situation
+				 DataContorller.CourseController.updateCourse({
+				 	courseName:$(courseNameEle).text(),
+				 	place:$(placeEle).text(),
+				 	teacher:$(teacherEle).text(),
+				 	reason:$(reasonEle).text(),
+				 	courseId:options.courseId
+				 },function(){
+				 	UI.showModal({
+				 		header:"System's sucking Tips",
+				 		body:"You've updated it,damn it,at this moment,you have to refresh to see the change "
+				 	})
+				 });
+
+			});
+
 			_enableEditItem();
 			return false;
 		});
@@ -247,7 +266,7 @@ UI.CourseTable=(function(){
 		        if(details.hasClass("detailsHidden1")){
 		            //there's a bit ugly here,though it happens once
 	           		//bind course details
-			  		UI.CourseDetail.bindEvent({
+			  		/*UI.CourseDetail.bindEvent({
 			  			courseId:courseId,
 			  			days:options.days,
 			  			target:$(details[0])
@@ -257,7 +276,7 @@ UI.CourseTable=(function(){
 			  			courseId:courseId,
 			  			target:details.find($(".reviews .row"))
 
-			  		});
+			  		});*/
 
 		            $(details[0]).removeClass("detailsHidden1");
 		            $(details[1]).removeClass("detailsHidden2");
@@ -492,7 +511,7 @@ UI.AddCoursePage=(function(){
 })();
 
 UI.Progress=(function(){
-	var template='<input class="input-medium" type="text"/><a class="btn btn-success btn-small" style="margin-right:22px" href="#"><i class="icon-ok"></i> Ok</a><a class="btn btn-warning btn-small" style="margin-left:22px" href="#"><i class="icon-remove"></i>No</a>'
+	var template='<input class="input-medium" id="progressComment" type="text"/><a class="btn btn-success btn-small" style="margin-right:22px" href="#"><i class="icon-ok"></i> Ok</a><a class="btn btn-warning btn-small" style="margin-left:22px" href="#"><i class="icon-remove"></i>No</a>'
 
 
 	var hidePopup=function(e){
@@ -508,6 +527,7 @@ UI.Progress=(function(){
 				originalWidth=parseInt(parent.find(".progress .bar")[0].style.width),
 				newWidth=0;
 			
+		 
 			parent.on("mousemove",".progress",function(e){
 				newWidth=e.offsetX/width*100;
 				//console.log("newWidth",newWidth,"originalWidth",originalWidth)
@@ -516,43 +536,73 @@ UI.Progress=(function(){
 
 			parent.on("mouseout",".progress",function(e){
 				//$("#tempholder").tooltip('hide')
-				console.log(status && originalWidth || current)
-				$(this).children(".bar").css("width",(status && originalWidth || current) +"%");
+				console.log("original:",originalWidth)
+				$(this).children(".bar").css("width",(originalWidth) +"%");
 			});
 
 			parent.on("click",".progress",function(e){
-
-				$(this).children(".bar").css("width",newWidth+"%");	
-
-				var tempwidth=originalWidth;
+				var bar=$(this).children(".bar"),
+					tempwidth=originalWidth;
 					
-				
-				tempholder=$("#tempholder");
-				status = false;
+					bar.css("width",newWidth+"%");		
+					
+				$(this).append('<div id="tempholder"></div>');
+				var tempholder=$("#tempholder");
+
+				tempholder.css("left",newWidth+"%").tooltip({title:template}).tooltip('show');
+
+				$("body").on("click",".tooltip-inner .btn-success",function(e){
+					originalWidth=newWidth;
+					$(".progress").trigger("mouseout");
+					//save progress data
+					
+					DataContorller.CourseController.addProgressComment({
+						courseId:options.courseId,
+						timePoint:newWidth,
+						comment:$("#progressComment").val()
+					},function(){
+						DataContorller.CourseController.updateProgress({
+							courseId:options.courseId,
+							width:newWidth,
+						});
+						tempholder.tooltip("hide");
+						//update the the progress bar
+						bar.css("width",newWidth+"%");
+						return false;						
+					});
+					return false;
+				});
+
+				$("body").on("click",".tooltip-inner .btn-warning",function(e){
+					originalWidth=tempwidth;
+					$(".progress").trigger("mouseout");
+					tempholder.tooltip("hide");
+					return false;
+				});
+				console.log("tempwidth: ",tempwidth);
+				originalWidth=newWidth;				
+				/*
 				if(tempholder[0]){
 					tempholder.css("left",newWidth+"%").tooltip({title:template}).tooltip('show')
 				}
 				else{
+
 					$(this).append('<div id="tempholder"></div>');
 					tempholder.css("left",newWidth+"%").tooltip({title:template}).tooltip('show')
 
 					$("body").on("click",".tooltip-inner .btn-success",function(e){
 						originalWidth=newWidth;
 						tempholder.tooltip("hide");
-						status=true;
-						return false;
 					});
 
 					$("body").on("click",".tooltip-inner .btn-warning",function(e){
 						originalWidth=tempwidth;
 						tempholder.tooltip("hide");
-						status=true;
-						return false;
 					});
 
 					current = newWidth;
 					
-				}
+				}*/
 				/*
 				tempholder=$("#tempholder");
 				$(this).children(".bar").css("width",newWidth+"%");
@@ -590,11 +640,9 @@ UI.Progress=(function(){
 		save=function(options){
 			
 		}
-
-
-	return {
-		bindEditable:bindEditable		
-	}
+		return {
+			bindEditable:bindEditable		
+			}
 })();
 
 UI.AddRemarkDropDown=(function(){
@@ -630,4 +678,47 @@ UI.AddRemarkDropDown=(function(){
 		bindAddRemarkEvent:addRemark
 	}
 
+})();
+
+UI.AddReview=(function(){
+	
+	function _hideReivewOverlay(){
+		console.log("--closing")
+		var addArea=$(".addReviewArea"),
+	        reviewArea=$(".ReviewArea");
+        	reviewArea && reviewArea.slideUp(400,"easeOutQuint");
+	        addArea && addArea.slideUp(400,"easeOutQuint",function(){
+	        		$(".reviewOverlay").hide();
+	        });
+	}
+
+	var bindAddReview=function(options){
+    	var addReviewArea=$(".addReviewArea");
+
+    	$(".reviewOverlay").show();
+    	addReviewArea.slideDown(400,"easeOutExpo");
+
+    	addReviewArea.find(".addReviewkBtn").on('click',function(){
+    		var parent=$(this).closest('.row'),
+    		    userName=parent.find('.addReviewUserName').val(),
+    		    content=parent.find('.addReviewContent').val();
+    		DataContorller.CourseController.addReview({
+    			courseId:options.courseId,
+    			userName:userName,
+    			content:content
+    		},function(){
+    			//hide the add Review overlay
+    			_hideReivewOverlay();
+    		});
+    	});
+    	addReviewArea.find(".cancelReviewkBtn").on("click",function(){
+    		_hideReivewOverlay();
+    	});
+
+    	return false;	
+	}
+
+	return {
+		bindEvent:bindAddReview
+	}
 })();

@@ -23,7 +23,7 @@
     
     <div class="span12 progressDetails">
       {{#progress_comments}}
-      <i class="progressComments tooltip icon-chevron-up icon-white" style="left:{{timePoint}}px"  data-original-title="{{comment}}"></i>
+      <i class="progressComments tooltip icon-chevron-up icon-white" style="left:{{timePoint}}%"  data-original-title="{{comment}}"></i>
 
       {{/progress_comments}}
     </div>

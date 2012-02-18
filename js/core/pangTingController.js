@@ -19,9 +19,12 @@ DataContorller.CourseController=(function(){
 	
 	var addCourseURL=routerRoot.course.addCourse,
 		addReviewURL=routerRoot.course.addReview,
-		addRemarkURL=routerRoot.course.addRemark;
+		addRemarkURL=routerRoot.course.addRemark,
+		addProgressCommentURL=routerRoot.course.addProgressComment;
 
-	var updateNumURL=routerRoot.course.updateNum;
+	var updateNumURL=routerRoot.course.updateNum,
+		updateProgressURL=routerRoot.course.updateProgress,
+		updateCourseURL  =routerRoot.course.updateCourse;
 
 	
 	 
@@ -138,7 +141,7 @@ DataContorller.CourseController=(function(){
 			 
 			function _success(data){
 				Functionality.modelCache.courseReviews[reviewIdentity]=data;
-				
+				console.log("get review receive data ",data)
 				if(!data.length){//no reviews at all
 					data[0]={
 							userName:"System tips",
@@ -163,8 +166,8 @@ DataContorller.CourseController=(function(){
 					type:"GET",
 					url:dataUtil.config.router.domain+dataUtil.config.router.course.getreview.replace("#courseid",courseId),
 					success:_success,
-					error:function(){
-						console.log("error")
+					error:function(e){
+						console.log("error",e)
 					}
 				});
 			}
@@ -264,7 +267,18 @@ DataContorller.CourseController=(function(){
 			});
 		},
 		addReview=function(data,callback){
-			
+			console.log("add review receive data",data,domain+addReviewURL);
+			dataUtil.request({
+				type:'POST',
+				url:domain+addReviewURL,
+				data:data,
+				success:function(result){
+					callback&&callback();
+					console.log("add review successfully",result);
+				},
+				error:_xhrErrorHandler
+
+			})			
 		},
 		addRemark=function(data,callback){
 			console.log("add remark receive data",data,domain+addRemarkURL);
@@ -279,7 +293,47 @@ DataContorller.CourseController=(function(){
 				error:_xhrErrorHandler
 
 			})
+		},
+		addProgressComment=function(data,callback){
+			console.log("add progress comments receive data",data);
+			dataUtil.request({
+				type:'POST',
+				url:domain+addProgressCommentURL,
+				data:data,
+				success:function(result){
+					callback&&callback();
+					console.log("add progress_comments successfully",result)
+				},
+				error:_xhrErrorHandler
+			});
+		},
+		updateProgress=function(data,callback){
+			console.log("add progress  receive data",data);
+			dataUtil.request({
+				type:'POST',
+				url:domain+updateProgressURL,
+				data:data,
+				success:function(result){
+					callback&&callback();
+					console.log("add progress successfully",result)
+				},
+				error:_xhrErrorHandler
+			});			
+		},
+		updateCourse=function(data,callback){
+			console.log("update course receive data",data);
+			dataUtil.request({
+				type:"POST",
+				url:domain+updateCourseURL,
+				data:data,
+				success:function(e){
+					callback&&callback();
+					console.log("update course successfully",result);
+				},
+				error:_xhrErrorHandler
+			});
 		}
+
 
 
 	
@@ -293,7 +347,11 @@ DataContorller.CourseController=(function(){
 		getRemarkByCourseId:getRemarkByCourseId,
 		addCourse:addCourse,
 		updateNum:updateNum,
-		addRemark:addRemark
+		updateProgress:updateProgress,
+		updateCourse:updateCourse,
+		addRemark:addRemark,
+		addReview:addReview,
+		addProgressComment:addProgressComment
 	}
 
 })();

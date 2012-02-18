@@ -217,8 +217,10 @@ var Functionality={
 						addCourse:"courses/addcourse",
 						addReview:"courses/addreview",
 						addRemark:"courses/addremark",
-						updateNum:"courses/updateNum"
-
+						addProgressComment:"courses/addprogresscomment",
+						updateNum:"courses/updateNum",
+						updateProgress:"courses/updateprogress",
+						updateCourse:"courses/updatecourse"
 					}
 				},
 				templatePath:{
