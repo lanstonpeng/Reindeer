@@ -53,7 +53,7 @@ UI.CourseReview=(function(){
 		//@@vote System
 		var parentNode=options.target;
 
-		
+		parentNode.off("click");//cancel the click event so that it won't tirgger many times
 		parentNode.on('click','.icon-arrow-up',function(e){
 
 			
@@ -511,8 +511,16 @@ UI.AddCoursePage=(function(){
 })();
 
 UI.Progress=(function(){
-	var template='<input class="input-medium" id="progressComment" type="text"/><a class="btn btn-success btn-small" style="margin-right:22px" href="#"><i class="icon-ok"></i> Ok</a><a class="btn btn-warning btn-small" style="margin-left:22px" href="#"><i class="icon-remove"></i>No</a>'
+	//var template='<input class="input-medium" id="progressComment" type="text"/><a class="btn btn-success btn-small" style="margin-right:22px" href="#"><i class="icon-ok"></i> Ok</a><a class="btn btn-warning btn-small" style="margin-left:22px" href="#"><i class="icon-remove"></i>No</a>'
+	var template=Functionality.loadTemplateSync({
+	    		path:Functionality.dataUtil.config.templatePath.courseProgressPopup
+	    });
+	
+	function _updateProgressUI=function(options){
+		//update progress bar
 
+		//add arrow 
+	}
 
 	var hidePopup=function(e){
 		
@@ -539,18 +547,18 @@ UI.Progress=(function(){
 				console.log("original:",originalWidth)
 				$(this).children(".bar").css("width",(originalWidth) +"%");
 			});
-
+			//Pop up the modal
 			parent.on("click",".progress",function(e){
 				var bar=$(this).children(".bar"),
 					tempwidth=originalWidth;
-					
-					bar.css("width",newWidth+"%");		
-					
+				//UX here
+				bar.css("width",newWidth+"%");						
 				$(this).append('<div id="tempholder"></div>');
-				var tempholder=$("#tempholder");
 
+				var tempholder=$("#tempholder");
 				tempholder.css("left",newWidth+"%").tooltip({title:template}).tooltip('show');
 
+				//save progress comment
 				$("body").on("click",".tooltip-inner .btn-success",function(e){
 					originalWidth=newWidth;
 					$(".progress").trigger("mouseout");
@@ -568,11 +576,12 @@ UI.Progress=(function(){
 						tempholder.tooltip("hide");
 						//update the the progress bar
 						bar.css("width",newWidth+"%");
+						//update the UI
 						return false;						
 					});
 					return false;
 				});
-
+				//cancle adding progress comment
 				$("body").on("click",".tooltip-inner .btn-warning",function(e){
 					originalWidth=tempwidth;
 					$(".progress").trigger("mouseout");
@@ -580,7 +589,10 @@ UI.Progress=(function(){
 					return false;
 				});
 				console.log("tempwidth: ",tempwidth);
-				originalWidth=newWidth;				
+				originalWidth=newWidth;	
+				
+				//cache the data here
+							
 				/*
 				if(tempholder[0]){
 					tempholder.css("left",newWidth+"%").tooltip({title:template}).tooltip('show')
@@ -692,13 +704,34 @@ UI.AddReview=(function(){
 	        });
 	}
 
+    function _updateReviewUI(options){
+    	//judge if there's less than 5 reivews
+    	var target=options.target.closest(".details").find(".reviews .row");
+
+    	if(target.children().length<5){//need to be updated
+    		var template=Functionality.loadTemplateSync({
+	    		path:Functionality.dataUtil.config.templatePath.courseReview
+	    	}),
+	    		token={
+	    			"token":[options]
+	    		},
+	    		result=$(Mustache.render(template,token)).css("display","none");
+	    		//insert it into the dom
+	    		target.append(result);
+	    		result.fadeIn();
+    	}
+    	else{
+    		//nothing to do
+    	}
+
+    }
 	var bindAddReview=function(options){
-    	var addReviewArea=$(".addReviewArea");
+    	var addReviewArea=$(".addReviewArea"),
+    		addReviewBtn=addReviewArea.find(".addReviewBtn");
 
     	$(".reviewOverlay").show();
     	addReviewArea.slideDown(400,"easeOutExpo");
-
-    	addReviewArea.find(".addReviewkBtn").on('click',function(){
+    	addReviewBtn.on('click',function(){
     		var parent=$(this).closest('.row'),
     		    userName=parent.find('.addReviewUserName').val(),
     		    content=parent.find('.addReviewContent').val();
@@ -707,14 +740,23 @@ UI.AddReview=(function(){
     			userName:userName,
     			content:content
     		},function(){
+    			//maybe a little bit ugly here,it should share this variable on the top
+    			_updateReviewUI({
+    				target:options.target,
+    				courseId:options.courseId,
+    				userName:userName,
+    				content:content
+    			});
     			//hide the add Review overlay
     			_hideReivewOverlay();
     		});
     	});
+    	Functionality.modelCache.courseReviews["review"+options.courseId+"NeedUpdated"]=true;
     	addReviewArea.find(".cancelReviewkBtn").on("click",function(){
     		_hideReivewOverlay();
     	});
-
+    	//cache the course reviews
+    	//Functionality.modelCache.course[options.days+"NeedUpdated"]
     	return false;	
 	}
 

@@ -95,7 +95,8 @@ window.pangting=(function(){
 
 	        	 
 	        	UI.AddReview.bindEvent({
-	        		courseId:courseId
+	        		courseId:courseId,
+	        		target:$(this)
 	        	});
 
 	        	return false;

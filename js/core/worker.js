@@ -1,3 +1,6 @@
+/*
+The webworker is trying to get the whole course Table from the server sliently
+*/
 self.addEventListener('message',function(){
     
 

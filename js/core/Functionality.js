@@ -229,7 +229,8 @@ var Functionality={
 					courseReview:"templates/tmpl-course-reviews.js",
 					courseAll:"templates/tmpl-course-all.js",
 					courseRemark:"templates/tmpl-course-remark.js",
-					courseAllReivew:"templates/tmpl-course-reviews-all.js"
+					courseAllReivew:"templates/tmpl-course-reviews-all.js",
+					courseProgressPopup:"templates/tmpl-progress-popup.js"
 				}
 			};
 

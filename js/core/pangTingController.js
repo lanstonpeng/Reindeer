@@ -159,9 +159,10 @@ DataContorller.CourseController=(function(){
 					data:data,
 					template:template
 				});
+				Functionality.modelCache.courseReviews["review"+courseId+"NeedUpdated"]=false;
 			}
 
-			if (! Functionality.modelCache.courseReviews[reviewIdentity]){
+			if (! Functionality.modelCache.courseReviews[reviewIdentity] || Functionality.modelCache.courseReviews["review"+courseId+"NeedUpdated"]  ){
 				dataUtil.request({
 					type:"GET",
 					url:dataUtil.config.router.domain+dataUtil.config.router.course.getreview.replace("#courseid",courseId),
