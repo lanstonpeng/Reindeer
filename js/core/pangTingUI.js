@@ -266,7 +266,7 @@ UI.CourseTable=(function(){
 		        if(details.hasClass("detailsHidden1")){
 		            //there's a bit ugly here,though it happens once
 	           		//bind course details
-			  		/*UI.CourseDetail.bindEvent({
+			  		UI.CourseDetail.bindEvent({
 			  			courseId:courseId,
 			  			days:options.days,
 			  			target:$(details[0])
@@ -276,7 +276,7 @@ UI.CourseTable=(function(){
 			  			courseId:courseId,
 			  			target:details.find($(".reviews .row"))
 
-			  		});*/
+			  		});
 
 		            $(details[0]).removeClass("detailsHidden1");
 		            $(details[1]).removeClass("detailsHidden2");
