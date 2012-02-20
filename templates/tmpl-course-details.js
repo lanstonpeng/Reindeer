@@ -13,6 +13,7 @@
   <div class="span3">
     <a class="btn edit" href="#"><i class="icon-pencil"></i> Edit</a>
     <a class="btn cancle" href="#"><i class="icon-remove"></i> Cancle</a>
+   
   </div>
   {{#progress}}
     <div class="span12 progress progress-info

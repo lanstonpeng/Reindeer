@@ -327,7 +327,7 @@ DataContorller.CourseController=(function(){
 				type:"POST",
 				url:domain+updateCourseURL,
 				data:data,
-				success:function(e){
+				success:function(result){
 					callback&&callback();
 					console.log("update course successfully",result);
 				},

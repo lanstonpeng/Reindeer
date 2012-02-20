@@ -230,7 +230,8 @@ var Functionality={
 					courseAll:"templates/tmpl-course-all.js",
 					courseRemark:"templates/tmpl-course-remark.js",
 					courseAllReivew:"templates/tmpl-course-reviews-all.js",
-					courseProgressPopup:"templates/tmpl-progress-popup.js"
+					courseProgressPopup:"templates/tmpl-progress-popup.js",
+					coursePrgressArrow:"templates/tmpl-progress-arrow.js"
 				}
 			};
 

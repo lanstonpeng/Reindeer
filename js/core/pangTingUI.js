@@ -120,10 +120,13 @@ UI.CourseDetail=(function(){
 		});
 
 		_bindCourseDeatilsEvent(options);
+		console.log("-- to progress options",options);
 		UI.Progress.bindEditable({
 			days:options.days,
 			courseId:options.courseId
 		});
+
+		//enable the progress comments
 		$('.progressComments').tooltip(); 
 	}
 
@@ -145,18 +148,37 @@ UI.CourseDetail=(function(){
 			editableItems.attr("contenteditable",false).removeClass("itemEditing");
 		}
 
-		function _saveSession(){
-			
+		//UX part in updating the course details
+		function _updateCourseCache(data){
+			var course=Functionality.modelCache.course[data.days];
+			for(var i=0,len=course.length;i<len;i++){
+			   if(course[i].id==data.courseId){
+			   	
+			   	var courseItem=course[i];	
+			   		courseItem.courseName=data.courseName;
+			   		courseItem.place=data.place;
+			   		courseItem.teacher=data.teacher;
+			   		courseItem.reason=data.reason;
+			   }
+			}
+			//update the course table
+			var target=$("."+data.days+"Content").find("tbody tr");
+			for(var i=0,len=target.length;i<len;i++){
+				if($(target[i]).attr("data-courseid")==data.courseId){
+					$(target[i]).find("td")[0].innerText=data.courseName;
+					$(target[i]).find("td")[2].innerText=data.teacher;
+				}
+			}
+			console.log("--update course cache");
 		}
 
-		function _recoverSession(){
-			
-		}
 
+		
 		options.target.find($("a.edit")).on("click",function(){
-			$(this).html('<i class="icon-edit"></i>Save' );
+			console.log("edit click")
+			$(this).html('<i class="icon-edit save"></i>Save' );
 			$(this).on("click",function(e){
-				 
+				 console.log("save click")
 				 //##warning,no all item can be updated ,depends on the current situation
 				 DataContorller.CourseController.updateCourse({
 				 	courseName:$(courseNameEle).text(),
@@ -165,10 +187,19 @@ UI.CourseDetail=(function(){
 				 	reason:$(reasonEle).text(),
 				 	courseId:options.courseId
 				 },function(){
+				 	_updateCourseCache({
+					 	courseName:$(courseNameEle).text(),
+					 	place:$(placeEle).text(),
+					 	teacher:$(teacherEle).text(),
+					 	reason:$(reasonEle).text(),
+					 	courseId:options.courseId,
+					 	days:options.days
+					 });
+					_disableEditItem();
 				 	UI.showModal({
 				 		header:"System's sucking Tips",
 				 		body:"You've updated it,damn it,at this moment,you have to refresh to see the change "
-				 	})
+				 	});
 				 });
 
 			});
@@ -514,12 +545,34 @@ UI.Progress=(function(){
 	//var template='<input class="input-medium" id="progressComment" type="text"/><a class="btn btn-success btn-small" style="margin-right:22px" href="#"><i class="icon-ok"></i> Ok</a><a class="btn btn-warning btn-small" style="margin-left:22px" href="#"><i class="icon-remove"></i>No</a>'
 	var template=Functionality.loadTemplateSync({
 	    		path:Functionality.dataUtil.config.templatePath.courseProgressPopup
+	    }),
+	    arrowTemplate=Functionality.loadTemplateSync({
+	    		path:Functionality.dataUtil.config.templatePath.coursePrgressArrow
 	    });
 	
-	function _updateProgressUI=function(options){
-		//update progress bar
+	function _updateProgressArrowUI(options){
+		var arrow=$(Mustache.render(arrowTemplate,options)).css("display","none");
+		options.target.append(arrow);
+		arrow.fadeIn();
 
 		//add arrow 
+	}
+
+	//This's where UX happens
+	function _updateProgressCache(data){
+		var course=Functionality.modelCache.course[data.days];
+		for(var i=0,len=course.length;i<len;i++){
+			if(course[i].id==data.courseId){
+				//update it
+				var progress=course[i].progress;
+				progress.width=data.timePoint;
+				progress.progress_comments.push({
+					comment:data.comment,
+					timePoint:data.timePoint
+				})
+			}
+		}
+
 	}
 
 	var hidePopup=function(e){
@@ -527,8 +580,8 @@ UI.Progress=(function(){
 		},
 	    bindEditable=function(options){
 	    		
-			var parent=$("."+options.days+"Content").find(".part2"),
-				tempholder="",
+			var parent=$("."+options.days+"Content").find(".part2");
+			var	tempholder="",
 				status=true,
 				current="",
 				width=parseInt(parent.find(".progress").css("width")),
@@ -560,23 +613,44 @@ UI.Progress=(function(){
 
 				//save progress comment
 				$("body").on("click",".tooltip-inner .btn-success",function(e){
+					var comment=$("#progressComment").val();
+
+					//set the bar width 
 					originalWidth=newWidth;
+					//a little bit ugly here,the improment of UX ?!
 					$(".progress").trigger("mouseout");
+
 					//save progress data
-					
 					DataContorller.CourseController.addProgressComment({
 						courseId:options.courseId,
 						timePoint:newWidth,
-						comment:$("#progressComment").val()
+						comment:comment
 					},function(){
+						//update the progress bar width,a little bit ugly here
+						//to-do:
+						//mix this part in addProgressComment
 						DataContorller.CourseController.updateProgress({
 							courseId:options.courseId,
 							width:newWidth,
 						});
 						tempholder.tooltip("hide");
-						//update the the progress bar
+						
+						//update the bar UI
 						bar.css("width",newWidth+"%");
-						//update the UI
+						//update the arrow UI
+						_updateProgressArrowUI({
+							timePoint:newWidth,
+							comment:comment,
+							target:parent.find(".progressDetails")
+						});
+
+						//update the course progress cache
+						_updateProgressCache({
+							timePoint:newWidth,
+							comment:comment,
+							days:options.days,
+							courseId:options.courseId
+						});
 						return false;						
 					});
 					return false;
@@ -588,65 +662,8 @@ UI.Progress=(function(){
 					tempholder.tooltip("hide");
 					return false;
 				});
-				console.log("tempwidth: ",tempwidth);
-				originalWidth=newWidth;	
-				
-				//cache the data here
-							
-				/*
-				if(tempholder[0]){
-					tempholder.css("left",newWidth+"%").tooltip({title:template}).tooltip('show')
-				}
-				else{
-
-					$(this).append('<div id="tempholder"></div>');
-					tempholder.css("left",newWidth+"%").tooltip({title:template}).tooltip('show')
-
-					$("body").on("click",".tooltip-inner .btn-success",function(e){
-						originalWidth=newWidth;
-						tempholder.tooltip("hide");
-					});
-
-					$("body").on("click",".tooltip-inner .btn-warning",function(e){
-						originalWidth=tempwidth;
-						tempholder.tooltip("hide");
-					});
-
-					current = newWidth;
-					
-				}*/
-				/*
-				tempholder=$("#tempholder");
-				$(this).children(".bar").css("width",newWidth+"%");
-				var tempwidth=originalWidth;
-				 
-				if( tempholder[0] ){
-					console.log("already",$("#tempholder"))
-					tempholder.css("left",newWidth+"%").tooltip('show')
-				}
-				else{
-					$(this).append('<div id="tempholder"></div>');
-					tempholder=$("#tempholder");
-					
-					tempholder.css("left",newWidth+"%").tooltip({title:template}).tooltip('show');
-
-					$("body").on("click",".tooltip-inner .btn-success",function(e){
-						originalWidth=newWidth;
-						tempholder.tooltip("hide");
-
-						return false;
-					});
-
-					$("body").on("click",".tooltip-inner .btn-warning",function(e){
-						originalWidth=tempwidth;
-						tempholder.tooltip("hide");
-						
-						return false;
-					});					
-				}
-				
-				originalWidth=newWidth;*/
-				
+				//console.log("tempwidth: ",tempwidth);
+				originalWidth=newWidth;				
 			});
 		},
 		save=function(options){
@@ -695,7 +712,6 @@ UI.AddRemarkDropDown=(function(){
 UI.AddReview=(function(){
 	
 	function _hideReivewOverlay(){
-		console.log("--closing")
 		var addArea=$(".addReviewArea"),
 	        reviewArea=$(".ReviewArea");
         	reviewArea && reviewArea.slideUp(400,"easeOutQuint");
