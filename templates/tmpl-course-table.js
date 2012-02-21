@@ -5,8 +5,8 @@
   <td>{{startTime}}</td>
   <td>{{teacher}}</td>
   <td>
-	  <i class="icon-arrow-up icon-white"></i><span>{{upNum}}</span>
-	  <i class="icon-arrow-down icon-white"></i><span>{{downNum}}</span>
+	  <i class="icon-arrow-up icon-white" title="nice"></i><span>{{upNum}}</span>
+	  <i class="icon-arrow-down icon-white" title="oops,bad"></i><span>{{downNum}}</span>
   </td>
 </tr>
 {{/token}}

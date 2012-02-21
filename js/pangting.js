@@ -1,14 +1,12 @@
 //Main thread	===================================================================================================
 window.pangting=(function(){
 		//config table
-		var constants={
+		/*var constants={
 			defaultTime:400,//most slideDown and slideUp use this
 			navTime:400,
 			addCourseTime:600,
-			remarkOverlayDown:600,
-			database:{}
-
-		};
+			remarkOverlayDown:600
+		};*/
 				 
 		function init(){
 			//kind of a bit werid or ugly here
@@ -29,11 +27,11 @@ window.pangting=(function(){
 				seeMoreReviewBtn=$("a.seeMoreReviewBtn"),
 				addReviewBtn=$("a.addReviewBtn");
 
-        
+        	var config=Functionality.dataUtil.config.constants;
 	        //navgation,a bit ugly here
 	        function _navDelegate(e){
 	            $.scrollTo($( "."+$(this).attr('class')+"Content" ),{
-	                            duration: constants.navTime,
+	                            duration: config.navTime,
 	                            easing:'jswing'          
 	            });
 	        };
@@ -50,10 +48,10 @@ window.pangting=(function(){
 	        	DataContorller.CourseController.getRemarkByCourseId({courseId:courseId});
 	        	cache.toggleClass("iphone_switch_off");
 	        	if (remarkOverlay.css("display")=="none"){
-	        		remarkOverlay.clearQueue().show("slide", { direction: "up",easing:"easeOutQuint" }, constants.remarkOverlayDown); 
+	        		remarkOverlay.clearQueue().show("slide", { direction: "up",easing:"easeOutQuint" }, config.remarkOverlayDown); 
 	        	}
 	        	else{
-	        		remarkOverlay.hide("slide", { direction: "up",easing:"easeOutQuint" }, constants.remarkOverlayDown); 
+	        		remarkOverlay.hide("slide", { direction: "up",easing:"easeOutQuint" }, config.remarkOverlayDown); 
 	        	}
 	        });
 	       //============================================================
@@ -62,12 +60,12 @@ window.pangting=(function(){
 	        seeAllCourseBtn.click(function(e){
 	          	var days=$(this).closest(".container").parent().attr("class").replace("Content","").trim();
 	 			DataContorller.CourseController.getAllTopCoursesTable({days:days});
-	          	$(".wholeCourseOverlay").show("slide", { direction: "left",easing:"easeOutQuint" }, constants.addCourseTime); 
+	          	$(".wholeCourseOverlay").show("slide", { direction: "left",easing:"easeOutQuint" }, config.seeAllCourseSlideTime); 
 	           	return false;
 	        });
 
 	        $(".wholeCourseOverlay .backTo").click(function(e){
-	          $(".wholeCourseOverlay").hide("slide", { direction: "left"}, constants.addCourseTime); 
+	          $(".wholeCourseOverlay").hide("slide", { direction: "left"}, config.seeAllCourseSlideTime); 
 	           return false;
 	        });
 	        //===========================================================
@@ -77,7 +75,7 @@ window.pangting=(function(){
 	        	var days=$(this).closest(".container").parent().attr("class").replace("Content","").trim(),
 	        		day=Functionality.getNum(days);
 
-				$(".courseOverlay").show("slide", { direction: "right",easing:"easeOutQuint" }, constants.addCourseTime,function(){
+				$(".courseOverlay").show("slide", { direction: "right",easing:"easeOutQuint" }, config.addCourseSlideTime,function(){
 					UI.AddCoursePage.bindEvent({
 						day:day,
 						days:days
@@ -101,16 +99,6 @@ window.pangting=(function(){
 
 	        	return false;
 	        });
-	        /*
-	        $(".addReviewArea").click(function(e){
-	        	var addArea=$(".addReviewArea"),
-	        		reviewArea=$(".ReviewArea");
-	        	reviewArea && reviewArea.slideUp(constants.defaultTime,"easeOutQuint");
-	        	addArea && addArea.slideUp(constants.defaultTime,"easeOutQuint",function(){
-	        		$(".reviewOverlay").hide();
-	        	});
-	        });*/
-
 	        //see All Reviews Btn
 	        seeMoreReviewBtn.click(function(e){
 	        	var courseId=$(this).closest(".details").parent().find(".part1 .span10").attr("data-courseid")
@@ -118,8 +106,13 @@ window.pangting=(function(){
 		        	courseId:courseId
 		        });
 	        	$(".reviewOverlay").show();
-	        	$(".addReviewArea,.ReviewArea").slideDown(constants.defaultTime,"easeOutExpo");
+	        	$(".addReviewArea,.ReviewArea").slideDown(config.defaultAnimationTime,"easeOutExpo");
 	        	return false;
+	    	});
+
+	    	//listen to the UP and DOWN  keyboard
+	    	$(document).on("keypress",function(e){
+	    		
 	    	});
 
 

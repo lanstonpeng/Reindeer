@@ -222,7 +222,8 @@ UI.CourseDetail=(function(){
 })();
 
 UI.CourseTable=(function(){
-	var couresDetailtemplatePath=Functionality.dataUtil.config.templatePath.courseDetail;
+	var couresDetailtemplatePath=Functionality.dataUtil.config.templatePath.courseDetail,
+		config=Functionality.dataUtil.config.constants;
 
 	function _bindTableEvent(options){
 		 
@@ -239,7 +240,7 @@ UI.CourseTable=(function(){
 		}
 
 		//@@vote System
-		courseTable.find("tbody").on("click","tr .icon-arrow-up",function(e){
+		courseTable.find("tbody tr .icon-arrow-up").on("click",function(e){
 			var courseid=$(this).closest("tr").attr("data-courseid"),
 				isallowUPNum=Functionality.isAllow({
 					item:"courseUPtest4",
@@ -254,12 +255,10 @@ UI.CourseTable=(function(){
 				header:"I know there's someone like you",
 				body:"You know,over voting is bad,"
 			});
-			//##warning ,UX improvment here
-			//not show up while clicking the vote button
-			
+			e.stopPropagation();
 		});
 
-		courseTable.find("tbody").on("click"," tr .icon-arrow-down",function(e){
+		courseTable.find("tbody tr .icon-arrow-down").on("click",function(e){
 			var courseid=$(this).closest("tr").attr("data-courseid"),
 				isallowDownNum=Functionality.isAllow({
 					item:"courseDowntest4",
@@ -276,7 +275,7 @@ UI.CourseTable=(function(){
 				body:"You know,over voting is bad,repeat,over voting is bad"			
 
 			});
-			//e.stopPropagation();
+			e.stopPropagation(); //you cant make it while you put an eye on the event listener(at first)
 		});
  	
  		
@@ -286,10 +285,9 @@ UI.CourseTable=(function(){
 	    		details=$(this).closest('.row').find(".details");
 	    		 
 	  		//close the remark overlay in case the user forget it
-	  		var remarkOverlay=$(".remarkOverlay")
-
+	  		var remarkOverlay=$(".remarkOverlay");
 	  		if(remarkOverlay.css("display")!="none"){
-	  			remarkOverlay.hide("slide", { direction: "up",easing:"easeOutQuint" }, 400); 
+	  			remarkOverlay.hide("slide", { direction: "up",easing:"easeOutQuint" }, config.remarkOverlayDown); 
 	        }
       	  
 		    //The animation part of the whole course details parts
@@ -469,7 +467,7 @@ UI.Remark=(function(){
 
 UI.AddCoursePage=(function(){
 
-
+	var config=Functionality.dataUtil.config.contans;
 	var bindAddCoursePageEvent=function(options){
  		var container=$(".addCourseArea"),
 			courseName=container.find(".addCourseName"),
@@ -486,7 +484,7 @@ UI.AddCoursePage=(function(){
 		//school should be like.... need to be refactor
 		//schoolId=container.find(".addCourseSchool")...
 		function _hideOverlay(){
-			$(".courseOverlay").hide("slide", { direction: "right" }, 400); 
+			$(".courseOverlay").hide("slide", { direction: "right" },config.addCourseSlideTime ); 
 		}
 		
 		function _clearItem(){
@@ -710,12 +708,12 @@ UI.AddRemarkDropDown=(function(){
 })();
 
 UI.AddReview=(function(){
-	
+	var config=Functionality.dataUtil.config.constants;
 	function _hideReivewOverlay(){
 		var addArea=$(".addReviewArea"),
 	        reviewArea=$(".ReviewArea");
-        	reviewArea && reviewArea.slideUp(400,"easeOutQuint");
-	        addArea && addArea.slideUp(400,"easeOutQuint",function(){
+        	reviewArea && reviewArea.slideUp(config.addReviewOverlay,"easeOutQuint");
+	        addArea && addArea.slideUp(config.addReviewOverlay,"easeOutQuint",function(){
 	        		$(".reviewOverlay").hide();
 	        });
 	}
@@ -746,7 +744,7 @@ UI.AddReview=(function(){
     		addReviewBtn=addReviewArea.find(".addReviewBtn");
 
     	$(".reviewOverlay").show();
-    	addReviewArea.slideDown(400,"easeOutExpo");
+    	addReviewArea.slideDown(config.addReviewOverlay,"easeOutExpo");
     	addReviewBtn.on('click',function(){
     		var parent=$(this).closest('.row'),
     		    userName=parent.find('.addReviewUserName').val(),

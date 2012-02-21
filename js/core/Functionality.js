@@ -201,6 +201,14 @@ var Functionality={
 			
 
 			du.config={
+				constants:{
+					defaultAnimationTime:400,
+					navTime:400,
+					addCourseSlideTime:600,
+					seeAllCourseSlideTime:600,
+					remarkOverlayDown:600,
+					addReviewOverlay:400,
+				},
 				router:{
 					domain:"http://localhost:3000/",
 					course:{
@@ -224,14 +232,14 @@ var Functionality={
 					}
 				},
 				templatePath:{
-					courseTable:"templates/tmpl-course-table.js",
-					courseDetail:"templates/tmpl-course-details.js",
-					courseReview:"templates/tmpl-course-reviews.js",
-					courseAll:"templates/tmpl-course-all.js",
-					courseRemark:"templates/tmpl-course-remark.js",
-					courseAllReivew:"templates/tmpl-course-reviews-all.js",
-					courseProgressPopup:"templates/tmpl-progress-popup.js",
-					coursePrgressArrow:"templates/tmpl-progress-arrow.js"
+					courseTable:"/templates/tmpl-course-table.js",
+					courseDetail:"/templates/tmpl-course-details.js",
+					courseReview:"/templates/tmpl-course-reviews.js",
+					courseAll:"/templates/tmpl-course-all.js",
+					courseRemark:"/templates/tmpl-course-remark.js",
+					courseAllReivew:"/templates/tmpl-course-reviews-all.js",
+					courseProgressPopup:"/templates/tmpl-progress-popup.js",
+					coursePrgressArrow:"/templates/tmpl-progress-arrow.js"
 				}
 			};
 
