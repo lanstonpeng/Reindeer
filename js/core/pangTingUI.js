@@ -467,7 +467,7 @@ UI.Remark=(function(){
 
 UI.AddCoursePage=(function(){
 
-	var config=Functionality.dataUtil.config.contans;
+	var config=Functionality.dataUtil.config.constants;
 	var bindAddCoursePageEvent=function(options){
  		var container=$(".addCourseArea"),
 			courseName=container.find(".addCourseName"),
@@ -530,6 +530,8 @@ UI.AddCoursePage=(function(){
 				}
 			);		
 		});
+		
+
 	}
 	
 	return {
@@ -572,7 +574,25 @@ UI.Progress=(function(){
 		}
 
 	}
+	function _triggerDragStart(e,ui){
+		var removeArea=$(".removeArea");
+		removeArea.fadeIn();
+		removeArea.off("mouseover").off("mouseout");
+		console.log("dragstart",ui)
+		removeArea.on("mouseover",function(e){
+			$(this).css("backgroundColor","rgba(255,0,0,0.4)");
+		}).on("mouseout",function(e){
+			$(this).css("backgroundColor","rgba(0,0,0,0.4)");
+		});
 
+	}
+	function _triggerDragStop(e,ui){
+		var removeArea=$(".removeArea");
+		removeArea.css("backgroundColor","rgba(0,0,0,0.4)")
+		console.log("dragstop",ui)
+		removeArea.fadeOut();
+	
+	}
 	var hidePopup=function(e){
 		
 		},
@@ -583,10 +603,33 @@ UI.Progress=(function(){
 				status=true,
 				current="",
 				width=parseInt(parent.find(".progress").css("width")),
+				progressComment= parent.find(".progressDetails i"),
 				originalWidth=parseInt(parent.find(".progress .bar")[0].style.width),
 				newWidth=0;
 			
-		 
+		    //bind draggable with jquery with the aim of remove the progress comments
+		   	/*progressComment.draggable({ 
+		   		revert: true,
+		   		cursorAt: { bottom: 0 },
+		   		start:_triggerDragStart,
+		   		stop:_triggerDragStop
+
+		   	});*/
+			$(".removeArea").on("dragover",function(e){
+				console.log("dragover",e);
+			});
+			$(".removeArea").on("dragenter",function(e){
+				console.log("dragenter",e)
+			});
+			$(".removeArea").on("drop",function(e){
+				console.log("drop",e)
+			});
+			$(".removeArea").on("dropend",function(e){
+				console.log("dropend",e)
+			});
+
+
+
 			parent.on("mousemove",".progress",function(e){
 				newWidth=e.offsetX/width*100;
 				//console.log("newWidth",newWidth,"originalWidth",originalWidth)
