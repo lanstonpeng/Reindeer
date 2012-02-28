@@ -26,7 +26,7 @@ DataContorller.CourseController=(function(){
 		updateProgressURL=routerRoot.course.updateProgress,
 		updateCourseURL  =routerRoot.course.updateCourse;
 
-	
+	var deleteSomethingURL=routerRoot.course.deleteSomething;
 	 
 
 	function _xhrErrorHandler(e){
@@ -333,6 +333,18 @@ DataContorller.CourseController=(function(){
 				},
 				error:_xhrErrorHandler
 			});
+		},
+		deleteSomething=function(data,callback){
+			console.log("deleteSomething ",data.itemName,data.itemId,domain+deleteSomethingURL);
+			dataUtil.request({
+				type:"POST",
+				url:domain+deleteSomethingURL,
+				success:function(result){
+					callback&&callback();
+					console.log("delete result",result);
+				},
+				error:_xhrErrorHandler
+			});
 		}
 
 
@@ -352,7 +364,8 @@ DataContorller.CourseController=(function(){
 		updateCourse:updateCourse,
 		addRemark:addRemark,
 		addReview:addReview,
-		addProgressComment:addProgressComment
+		addProgressComment:addProgressComment,
+		deleteSomething:deleteSomething
 	}
 
 })();

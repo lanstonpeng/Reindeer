@@ -574,11 +574,14 @@ UI.Progress=(function(){
 		}
 
 	}
-	function _triggerDragStart(e,ui){
+	function _triggerDragStart(e){
+		console.log("drag start ",e)
 		var removeArea=$(".removeArea");
+		e.dataTransfer.effectAllowed='move';
+        e.dataTransfer.setData("myid",this.dataset.pcommentId); 
 		removeArea.fadeIn();
+
 		removeArea.off("mouseover").off("mouseout");
-		console.log("dragstart",ui)
 		removeArea.on("mouseover",function(e){
 			$(this).css("backgroundColor","rgba(255,0,0,0.4)");
 		}).on("mouseout",function(e){
@@ -589,10 +592,33 @@ UI.Progress=(function(){
 	function _triggerDragStop(e,ui){
 		var removeArea=$(".removeArea");
 		removeArea.css("backgroundColor","rgba(0,0,0,0.4)")
-		console.log("dragstop",ui)
 		removeArea.fadeOut();
 	
 	}
+	function _setCommentRemoveable(){
+		var removeArea=$(".removeArea");
+
+		removeArea[0].addEventListener("dragover",function(e){
+			e.preventDefault();
+			return false;
+		},false)
+		removeArea.on("dragenter",function(e){
+			//console.log("dragenter",e)
+		});
+		removeArea.on("dropend",function(e){
+			//console.log("dropend",e)
+		});
+		removeArea[0].addEventListener("drop",function(e){
+			console.log("drop",e.dataTransfer.getData("myid"));
+			DataContorller.CourseController.deleteSomething({
+				itemName:"ProgressComment",
+				itemId:e.dataTransfer.getData("myid")
+			})
+			e.stopPropagation();
+		},false);
+
+	};
+
 	var hidePopup=function(e){
 		
 		},
@@ -601,43 +627,36 @@ UI.Progress=(function(){
 			var parent=$("."+options.days+"Content").find(".part2");
 			var	tempholder="",
 				status=true,
-				current="",
+				removeArea=$(".removeArea"),
 				width=parseInt(parent.find(".progress").css("width")),
 				progressComment= parent.find(".progressDetails i"),
 				originalWidth=parseInt(parent.find(".progress .bar")[0].style.width),
 				newWidth=0;
 			
 		    //bind draggable with jquery with the aim of remove the progress comments
-		   	/*progressComment.draggable({ 
-		   		revert: true,
-		   		cursorAt: { bottom: 0 },
-		   		start:_triggerDragStart,
-		   		stop:_triggerDragStop
+		   	/* progressComment.draggable({ 
+		   		//revert: true,
+		   		//cursorAt: { bottom: 0 },
+		   		//start:_triggerDragStart,
+		   		//stop:_triggerDragStop
 
 		   	});*/
-			$(".removeArea").on("dragover",function(e){
-				console.log("dragover",e);
-			});
-			$(".removeArea").on("dragenter",function(e){
-				console.log("dragenter",e)
-			});
-			$(".removeArea").on("drop",function(e){
-				console.log("drop",e)
-			});
-			$(".removeArea").on("dropend",function(e){
-				console.log("dropend",e)
-			});
-
+			//progressComment removeable
+			//progressComment.on("dragstart",_triggerDragStart);
+			//progressComment.on("dragstop",_triggerDragStop);
+			for(var i=0,len=progressComment.length;i<len;i++){
+				progressComment[i].addEventListener("dragstart",_triggerDragStart,false)
+				progressComment[i].addEventListener("dragend",_triggerDragStop,false)
+			}
+			_setCommentRemoveable();
 
 
 			parent.on("mousemove",".progress",function(e){
 				newWidth=e.offsetX/width*100;
-				//console.log("newWidth",newWidth,"originalWidth",originalWidth)
 				$(this).children(".bar").css("width",newWidth+"%");
 			});	
 
 			parent.on("mouseout",".progress",function(e){
-				//$("#tempholder").tooltip('hide')
 				console.log("original:",originalWidth)
 				$(this).children(".bar").css("width",(originalWidth) +"%");
 			});

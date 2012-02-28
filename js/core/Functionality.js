@@ -228,7 +228,8 @@ var Functionality={
 						addProgressComment:"courses/addprogresscomment",
 						updateNum:"courses/updateNum",
 						updateProgress:"courses/updateprogress",
-						updateCourse:"courses/updatecourse"
+						updateCourse:"courses/updatecourse",
+						deleteSomething:"courses/deleteSomething"
 					}
 				},
 				templatePath:{
