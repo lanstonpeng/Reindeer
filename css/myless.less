@@ -545,13 +545,21 @@ body{
 			position: relative;
 
 			.progressComments{
-					opacity:1;
-					position: absolute;
-					width:5px;
-					top:2px;
-					cursor:pointer;
-				}
+				opacity:1;
+				position: absolute;
+				width:5px;
+				top:2px;
+				cursor:pointer;
+				.Transistion(all,0.2s,ease-in-out);
+					
 			}
+			.progressComments:hover{
+				-webkit-transform: scale(1.1) translateY(1px);
+				-moz-transform:scale(1.1) translateY(1px);
+				-o-transform:scale(1.1) translateY(1p);
+			}
+
+		}
 
 	}
 

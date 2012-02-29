@@ -150,6 +150,7 @@ UI.CourseDetail=(function(){
 
 		//UX part in updating the course details
 		function _updateCourseCache(data){
+			//update the cache here
 			var course=Functionality.modelCache.course[data.days];
 			for(var i=0,len=course.length;i<len;i++){
 			   if(course[i].id==data.courseId){
@@ -542,7 +543,6 @@ UI.AddCoursePage=(function(){
 })();
 
 UI.Progress=(function(){
-	//var template='<input class="input-medium" id="progressComment" type="text"/><a class="btn btn-success btn-small" style="margin-right:22px" href="#"><i class="icon-ok"></i> Ok</a><a class="btn btn-warning btn-small" style="margin-left:22px" href="#"><i class="icon-remove"></i>No</a>'
 	var template=Functionality.loadTemplateSync({
 	    		path:Functionality.dataUtil.config.templatePath.courseProgressPopup
 	    }),
@@ -582,9 +582,10 @@ UI.Progress=(function(){
 		removeArea.fadeIn();
 
 		removeArea.off("mouseover").off("mouseout");
-		removeArea.on("mouseover",function(e){
+		removeArea.on("dragover",function(e){
 			$(this).css("backgroundColor","rgba(255,0,0,0.4)");
-		}).on("mouseout",function(e){
+			return false;
+		}).on("dragleave",function(e){
 			$(this).css("backgroundColor","rgba(0,0,0,0.4)");
 		});
 
@@ -595,13 +596,14 @@ UI.Progress=(function(){
 		removeArea.fadeOut();
 	
 	}
-	function _setCommentRemoveable(){
+	function _setCommentRemoveable(callback){
 		var removeArea=$(".removeArea");
 
 		removeArea[0].addEventListener("dragover",function(e){
 			e.preventDefault();
 			return false;
-		},false)
+		},false);
+
 		removeArea.on("dragenter",function(e){
 			//console.log("dragenter",e)
 		});
@@ -609,11 +611,18 @@ UI.Progress=(function(){
 			//console.log("dropend",e)
 		});
 		removeArea[0].addEventListener("drop",function(e){
-			console.log("drop",e.dataTransfer.getData("myid"));
+			//console.log("drop",e,e.dataTransfer.getData("myid"));
+			var progressCommentId=parseInt(e.dataTransfer.getData("myid"));
 			DataContorller.CourseController.deleteSomething({
 				itemName:"ProgressComment",
-				itemId:e.dataTransfer.getData("myid")
-			})
+				itemId:progressCommentId
+			},function(){
+				//delete the arrow if it's success delete
+				//$(".progressDetails i")
+				console.log("hi,I'm a callback")
+				//update cache here
+				callback(progressCommentId);
+			});
 			e.stopPropagation();
 		},false);
 
@@ -632,23 +641,30 @@ UI.Progress=(function(){
 				progressComment= parent.find(".progressDetails i"),
 				originalWidth=parseInt(parent.find(".progress .bar")[0].style.width),
 				newWidth=0;
-			
-		    //bind draggable with jquery with the aim of remove the progress comments
-		   	/* progressComment.draggable({ 
-		   		//revert: true,
-		   		//cursorAt: { bottom: 0 },
-		   		//start:_triggerDragStart,
-		   		//stop:_triggerDragStop
 
-		   	});*/
-			//progressComment removeable
-			//progressComment.on("dragstart",_triggerDragStart);
-			//progressComment.on("dragstop",_triggerDragStop);
 			for(var i=0,len=progressComment.length;i<len;i++){
 				progressComment[i].addEventListener("dragstart",_triggerDragStart,false)
 				progressComment[i].addEventListener("dragend",_triggerDragStop,false)
 			}
-			_setCommentRemoveable();
+			_setCommentRemoveable(function(progressCommentId){
+				//Functionality.modelCache.course[days+"NeedUpdated"]=true;
+				//bullshit
+				var todayCourse=Functionality.modelCache.course[options.days];
+				for(var i=0,len=todayCourse.length;i<len;i++){
+					if(todayCourse[i].id==options.courseId){
+						for(var k=0,sublen=todayCourse[i].progress.progress_comments.length;k<sublen;k++){
+							if(todayCourse[i].progress.progress_comments[k].id==progressCommentId){
+								todayCourse[i].progress.progress_comments.splice(k,1);
+								//update the UI,remove the small arrow
+								progressComment.filter("[data-pcomment-id='"+progressCommentId+"']").fadeOut();
+								break;
+							}
+						}
+					break;
+					}
+				}
+					
+			});
 
 
 			parent.on("mousemove",".progress",function(e){
@@ -660,6 +676,7 @@ UI.Progress=(function(){
 				console.log("original:",originalWidth)
 				$(this).children(".bar").css("width",(originalWidth) +"%");
 			});
+
 			//Pop up the modal
 			parent.on("click",".progress",function(e){
 				var bar=$(this).children(".bar"),

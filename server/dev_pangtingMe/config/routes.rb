@@ -19,8 +19,10 @@ DevPangtingme::Application.routes.draw do
       post "/updateremark" => "Courses#updateRemark"
       post "/updatereview" => "Courses#updateReview"
       post "/updatecourse" => "Courses#updateCourse"
-
+      post "/updateprogress" =>"Courses#updateProgress"
       post "/updateNum" => "Courses#updateNum"
+
+      post "/deleteSomething" => "Courses#deleteSomething"
     end
   # The priority is based upon order of creation:
   # first created -> highest priority.

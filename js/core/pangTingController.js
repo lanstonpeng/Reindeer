@@ -335,9 +335,10 @@ DataContorller.CourseController=(function(){
 			});
 		},
 		deleteSomething=function(data,callback){
-			console.log("deleteSomething ",data.itemName,data.itemId,domain+deleteSomethingURL);
+			console.log("deleteSomething ",data,domain+deleteSomethingURL);
 			dataUtil.request({
 				type:"POST",
+				data:data,
 				url:domain+deleteSomethingURL,
 				success:function(result){
 					callback&&callback();

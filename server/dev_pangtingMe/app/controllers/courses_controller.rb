@@ -8,7 +8,7 @@ class CoursesController < ApplicationController
 	end
 	
 	def getCourseByDay
-		render :json => Course.where("day = ?",params[:day]).limit(5).order('upNum desc').to_json(:include => {:progress =>{ :include => :progress_comments}},:except=>[:created_at,:updated_at],:inclue=>[:id])
+		render :json => Course.where("day = ?",params[:day]).limit(5).order('upNum desc').to_json(:include => {:progress =>{ :include => {:progress_comments=>{:except=>[:created_at,:updated_at]}},:except=>[:created_at,:updated_at]}},:except=>[:created_at,:updated_at],:inclue=>[:id])
 	end
 
 	def getAllCourseByDay
@@ -64,6 +64,8 @@ class CoursesController < ApplicationController
 		}
 
 		newCourse=School.find(schoolId).courses.new(courseName:courseName,place:place,teacher:teacher,reason:reason,school_id:schoolId,day:day,startTime:startTime,endTime:endTime)
+		#create an empty progress 
+		newCourse.create_progress
 		if newCourse.save
 			render :json => { status:@@successCode+" adding course successfully",course:course}
 		else
@@ -134,24 +136,21 @@ class CoursesController < ApplicationController
 		place=params[:place]
 		teacher=params[:teacher]
 		reason=params[:reason]
-		schoolId=params[:schoolId]
 		day=params[:day]
 		courseId=params[:courseId]
 		startTime=params[:startTime] && DateTime.parse(params[:startTime]) ||DateTime.parse("23:59")
 		endTime=params[:endTime] &&  DateTime.parse(params[:endTime]) ||DateTime.parse("23:59")
 		upNum=params[:upNum]
 		downNum=params[:downNum]
+		#I delete the schoolId here
 
-		courseItem=School.find(schoolId).courses.find(courseId)
+		courseItem=Course.find(courseId)
 		courseItem.with_lock do
 			if courseItem.update_attributes({
 					courseName:courseName,
 					place:place,
 					teacher:teacher,
-					reason:reason,
-					day:day,
-					startTime:startTime,
-					endTime:endTime
+					reason:reason
 				})
 
 				#maybe safer by this mean
@@ -273,8 +272,37 @@ class CoursesController < ApplicationController
 
 	end
 
-	def downNum
+	def updateProgress
+		courseId=params[:courseId]
+		width=params[:width]
 
+		course=Course.find(courseId)
+		course.with_lock do 
+			course.progress.update_attribute(
+				'width',width
+			)
+			render :json => {status:@@successCode+" update progress successfully"}
+		end
+	end
+
+	def deleteSomething
+		item=params["itemName"]
+		itemId=params["itemId"]
+		case item
+		when "ProgressComment"
+			ProgressComment.find(itemId).delete
+			render :json => {status:@@successCode+" delete #{item} #{itemId} successfully"}
+		when "Course"
+			Course.with_lock do
+				Course.find(itemId).delete
+				render :json => {status:@@successCode+" delete #{item} #{itemId} successfully"}
+			end
+		when "Progress"
+			Porgress.find(itemId).delete
+			render :json => {status:@@successCode+" delete #{item} #{itemId} successfully"}
+		else
+			render :json => {status:@@successCode+"#{item} ss #{itemId} nothing"}
+		end
 	end
 
 
