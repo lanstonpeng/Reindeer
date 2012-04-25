@@ -12,7 +12,7 @@ window.pangting=(function(){
 				 
 		function init(){
 			//kind of a bit werid or ugly here
-			DataContorller.CourseController.initCourseTableByDay({day:1});
+			//DataContorller.CourseController.initCourseTableByDay({day:1});
 			/*
             DataContorller.CourseController.initCourseTableByDay({day:2});
 			DataContorller.CourseController.initCourseTableByDay({day:3});
