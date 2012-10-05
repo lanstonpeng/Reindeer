@@ -1,4 +1,5 @@
-source 'https://rubygems.org'
+#source 'https://rubygems.org'
+source 'http://ruby.taobao.org'
 
 gem 'rails', '3.2.1'
 
@@ -7,7 +8,7 @@ gem 'rails', '3.2.1'
 
 group :development do
     gem 'sqlite3'
-    gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git'
+    #gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git'
 end
 
 group :production do

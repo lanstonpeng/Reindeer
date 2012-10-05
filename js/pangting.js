@@ -12,15 +12,13 @@ window.pangting=(function(){
 				 
 		function init(){
 			//kind of a bit werid or ugly here
-			//DataContorller.CourseController.initCourseTableByDay({day:1});
-			/*
+			DataContorller.CourseController.initCourseTableByDay({day:1});
             DataContorller.CourseController.initCourseTableByDay({day:2});
 			DataContorller.CourseController.initCourseTableByDay({day:3});
 			DataContorller.CourseController.initCourseTableByDay({day:4});
 			DataContorller.CourseController.initCourseTableByDay({day:5});
 			DataContorller.CourseController.initCourseTableByDay({day:6});
 			DataContorller.CourseController.initCourseTableByDay({day:7});
-            */
 
 			//init the necessary elements,variables
 			var sideBarBtn=$("ul.buttons"),

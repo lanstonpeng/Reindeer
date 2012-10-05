@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(:version => 20120210010925) do
   create_table "courses", :force => true do |t|
     t.string   "courseName", :limit => 50,                                     :null => false
     t.string   "place",      :limit => 100,                                    :null => false
-    t.datetime "startTime",                 :default => '2012-02-10 00:39:52'
+    t.datetime "startTime",                 :default => '2012-10-04 13:36:15'
     t.datetime "endTime"
     t.string   "teacher",    :limit => 20,  :default => "nil_teacher"
     t.text     "reason",                                                       :null => false
